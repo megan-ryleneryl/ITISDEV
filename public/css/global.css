@@ -1,0 +1,122 @@
+/* :root {
+    --gray: #D9D9D9;
+    --dark-purple: #36183a;
+    --purple: #632382;
+    --light-purple: #b4a7d6;
+    --magenta: #a64d79;
+    --beige: #f7e8d3;
+    --white: #fefefe;
+    --lighter-red: #f1bdbd;
+    --light-red: #dc9898;
+    --red: rgb(164, 17, 17);
+    --dark-red: rgb(107, 22, 22);
+    --orange: #f6d089;
+    --light-green: rgb(194, 238, 194);
+    --green: rgb(17, 164, 54);
+    --dark-green: rgb(22, 107, 56);
+    --lalezar: 'Lalezar', sans-serif;
+    --roboto: 'Roboto Condensed', sans-serif;
+}
+
+body {
+    font-family: var(--roboto);
+    font-size: 1em;
+    margin: 0px;
+}
+
+h1 {
+    color: var(--dark-purple);
+    font-size: 3em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: var(--lalezar);
+    margin: 0%;
+}
+
+h2 {
+    color: var(--dark-purple);
+    font-size: 2em;
+    letter-spacing: 1px;
+    font-family: var(--lalezar);
+    margin: 0%;
+}
+
+#account-type {
+    color: var(--dark-purple);
+}
+
+input,
+.alert {
+    background-color: var(--gray);
+    border-radius: 8px;
+    border: none;
+    margin: 10px;
+    padding: 10px;
+    width: 80%;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    background-color: var(--purple);
+    font-family: var(--lalezar);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    align-items: center;
+    color: var(--white);
+}
+
+a {
+    color: var(--purple);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--beige);
+    height: 75px;
+}
+
+#header-left, #header-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+#header-left p {
+    margin-left: 20px;
+}
+
+header a,
+footer a {
+    margin: 10px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 10px;
+}
+
+footer a {
+    font-size: 1em;
+}
+
+header a:hover,
+footer a:hover {
+    background-color: #fbf0e2;
+    border-radius: 4px;
+    font-weight: 900;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+footer {
+    background-color: var(--beige);
+    padding: 30px;
+} */
