@@ -1,23 +1,11 @@
 const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
-  sender_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-  },
-  receiver_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-  },
-  message: {
-      type: String,
-      required: true
-  },
-  created_at: {
-      type: Date,
-      default: Date.now
-  }
+  senderID: { type: Number, ref: 'User' }, // Changed both objectids to Numbers
+  receiverID: { type: Number, ref: 'User' }, 
+  message: { type: String, required: true },
+  date: { type: Date, default: Date.now } // Renamed from created_at to date
 });
 
 const Message = mongoose.model('messages', MessageSchema);
-module.exports = Message
+module.exports = Message;

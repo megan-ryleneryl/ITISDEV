@@ -1,27 +1,13 @@
 const mongoose = require('mongoose');
 
 const DriverSchema = new mongoose.Schema({
-  user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-  },
-  driver_license: {
-      type: String,
-      required: true
-  },
-  vehicle_details: {
-      type: String,
-      required: true
-  },
-  vehicle_make: {
-      type: String
-  },
-  vehicle_model: {
-      type: String
-  },
-  vehicle_plate_number: {
-      type: String
-  }
+  userID: { type: Number, ref: 'User' }, // Changed to number from objectid
+  driverID: { type: Number, required: true }, // Do you think this is applicable to add? I'm thinking about how we'll call the driver object in Ride
+  driverLicense: { type: String, required: true },
+  carDetails: { type: String, required: true }, // What's the difference between vehicle details and make/model?
+  carMake: { type: String },
+  carModel: { type: String },
+  carPlate: { type: String }
 });
 
 const Driver = mongoose.model('drivers', DriverSchema);
