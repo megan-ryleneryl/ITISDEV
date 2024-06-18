@@ -83,15 +83,6 @@ app.get('/', (req, res) => {
 //     })
 // });
 
-// App Routes
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const rideRoutes = require('./routes/rideRoutes');
-const bookingRoutes = require('./routes/bookingRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-const contestRoutes = require('./routes/contestRoutes');
-const chatRoutes = require('./routes/chatRoutes');
-
 app.use('/auth', authRoutes); // Use the authRoutes module for all routes starting with /auth
 app.use('/user', userRoutes); // Use the userRoutes module for all routes starting with /user
 app.use('/ride', rideRoutes); // Use the rideRoutes module for all routes starting with /ride
