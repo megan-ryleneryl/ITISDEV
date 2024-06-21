@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 
 const BookingSchema = new mongoose.Schema({
-  bookingID: { type: Number, required: true },
-  rideID: { type: Number, ref: 'Ride' },
-  passengerID: { type: Number, ref: 'User' }, // Changed objectid to number
-  status: { type: String, required: true }, // Will we enum this? Or boolean
-  paymentStatus: { type: String, enum: ['pending', 'paid', 'refunded'], default: 'pending' },
-  createdAt: { type: Date, default: Date.now }, 
-  updatedAt: { type: Date, default: Date.now } 
+  bookingID: { type: Number, required: true }, // Bookings are IDs from 40001 onwards
+  rideID: { type: Number, ref: 'Ride' }, // Rides are IDs from 30001 onwards
+  passengerID: { type: Number, ref: 'User' }, // Should match with a userID (20001 onwards)
+  status: { type: String, enum: ['pending', 'completed', 'canceled'], default: 'pending' },
+  paymentStatus: { type: String, enum: ['pending', 'paid', 'refunded'], default: 'pending' } 
 });
 
 const Booking = mongoose.model('bookings', BookingSchema);

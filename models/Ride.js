@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 
 const RideSchema = new mongoose.Schema({
-  rideID: { type: Number, required: true },
-  driverID: { type: Number, ref: 'Driver' }, // Changed this from object id and driver
-  origin: { type: String, required: true },
-  destination: { type: String, required: true },
-  datetime: { type: Date, required: true }, // Merged date and time since date objects contain both
-  numSeats: { type: Number, required: true },
-  price: { type: Number, required: true },
-  status: { type: String, enum: ['pending', 'confirmed', 'completed', 'canceled'], default: 'pending' }, // Under what conditions will it be set to confirmed? + I'm thinking about whether the ride should contain status or booking (feel ko ride)
+  rideID: { type: Number, required: true }, // Starts at ID 30001 onwards
+  driverID: { type: Number, ref: 'Driver' }, // Should match a userID (20001 onwards)
+  origin: { type: String, required: true }, // Just a city in luzon
+  destination: { type: String, required: true }, // Also a city in luzon
+  datetime: { type: Date, required: true }, 
+  numSeats: { type: Number, required: true }, // Number of seats available in the car
+  price: { type: Number, required: true }, // Price in pesos, can range from 50 to 1000 pesos
   description: { type: String },
 });
 
