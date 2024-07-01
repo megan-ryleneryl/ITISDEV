@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <header>
+        <h1>University Carpooling Application</h1>
+        <nav>
+            <a href="/index.html">Home</a>
+            <a href="/account.html">Account</a>
+            <a href="/chat-list.html">Chats</a>
+            <a href="#" id="logoutButton">Logout</a>
+        </nav>
+    </header>
+    <main>
+        <div class="chat-container">
+            <div class="driver-info">
+                <img id="driverProfilePic" class="profile-pic" src="" alt="Driver's profile picture">
+                <div>
+                    <h2 id="driverName">Driver Name</h2>
+                    <p id="bookingDate">Booking Date</p>
+                </div>
+            </div>
+            <div id="chatDetailsContainer">
+                <div id="messages" class="messages-container"></div>
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Type a message">
+                    <button id="sendMessage">Send Message</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="node_modules/handlebars/dist/handlebars.min.js"></script>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
