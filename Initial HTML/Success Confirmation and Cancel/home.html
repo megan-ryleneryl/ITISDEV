@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Carpooling Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #007BFF;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+        .navbar a:hover {
+            color: #ccc;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .welcome-message {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .rides-section {
+            margin-top: 20px;
+        }
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 5px;
+            cursor: pointer;
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+            border: 1px solid #ccc;
+        }
+        .tab-active {
+            background-color: #fff;
+            border-bottom: none;
+        }
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+        .ride {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .ride-details {
+            flex: 1;
+        }
+        .ride-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .ride h3 {
+            margin: 0;
+            cursor: pointer;
+        }
+        .ride h3:hover {
+            text-decoration: underline;
+        }
+        .ride p {
+            margin: 5px 0;
+        }
+        .ride button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .ride button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">Carpooling Site</div>
+        <div>
+            <a href="home.html">Home</a>
+            <a href="find_a_ride.html">Find a Ride</a>
+            <a href="chats.html">Chats</a>
+            <a href="account.html">Account</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Welcome to Carpooling Site</h1>
+        <div class="welcome-message">
+            <p>Welcome back to the Carpooling Site! We are here to help you find the best rides and make your journeys more affordable and convenient. Use the navigation links to explore our services.</p>
+        </div>
+        
+        <div class="rides-section">
+            <div class="tabs">
+                <div class="tab tab-active" onclick="showTab('upcoming')">Upcoming Rides</div>
+                <div class="tab" onclick="showTab('history')">Rides History</div>
+            </div>
+            <div id="upcoming" class="tab-content">
+                <div class="ride">
+                    <div class="ride-details">
+                        <h3 onclick="location.href='confirmation.html'">Ride to University</h3>
+                        <p>Date: 2024-07-05</p>
+                        <p>Time: 08:00 AM</p>
+                        <p>Driver: John Doe</p>
+                    </div>
+                    <div class="ride-actions">
+                        <p>₱179</p>
+                        <button>Cancel Ride</button>
+                    </div>
+                </div>
+            </div>
+            <div id="history" class="tab-content" style="display: none;">
+                <div class="ride">
+                    <div class="ride-details">
+                        <h3 onclick="location.href='success_confirmation.html'">Ride from University</h3>
+                        <p>Date: 2024-06-30</p>
+                        <p>Time: 05:00 PM</p>
+                        <p>Driver: Jane Smith</p>
+                    </div>
+                    <div class="ride-actions">
+                        <p>₱179</p>
+                        <button>Buy Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTab(tabId) {
+            document.getElementById('upcoming').style.display = 'none';
+            document.getElementById('history').style.display = 'none';
+            document.querySelector('.tab-active').classList.remove('tab-active');
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('tab-active');
+            document.getElementById(tabId).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
