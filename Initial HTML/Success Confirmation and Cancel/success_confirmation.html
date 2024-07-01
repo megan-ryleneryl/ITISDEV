@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ride Success Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+        }
+        .confirmation-details {
+            margin: 20px 0;
+        }
+        .confirmation-details p {
+            margin: 5px 0;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            gap: 100px;
+        }
+        .rating-review, .contest-ride {
+            margin: 20px 0;
+        }
+        .rating-review button, .contest-ride button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .rating-review button:hover, .contest-ride button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ride Success Confirmation</h1>
+        <div class="confirmation-details">
+            <p><strong>Ride ID:</strong> 123456</p>
+            <p><strong>Route:</strong> Campus A to Campus B</p>
+            <p><strong>Date of Travel:</strong> 2024-07-01</p>
+            <p><strong>Time of Travel:</strong> 09:00 AM</p>
+            <p><strong>Ride Pick Up:</strong> Location A</p>
+            <p><strong>Ride Dropoff:</strong> Location B</p>
+            <p><strong>Pick Up Time:</strong> 09:15 AM</p>
+            <p><strong>Drop Off Time:</strong> 10:00 AM</p>
+            <p><strong>Driver:</strong> John Doe</p>
+            <p><strong>Price:</strong> $10</p>
+        </div>
+        <div class="buttons">
+            <div class="rating-review">
+                <button onclick="location.href='rate_review.html'">Rate and Review</button>
+            </div>
+            <div class="contest-ride">
+                <button onclick="location.href='contest_ride.html'">Contest Ride</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
