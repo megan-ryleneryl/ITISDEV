@@ -1,0 +1,13 @@
+<script id="chat-list-template" type="text/x-handlebars-template">
+    {{#each chats}}
+    <a href="chat.html?chatId={{id}}" class="chat-item">
+        <div class="chat-item-content">
+            <img src="{{profilePic}}" alt="{{driverName}}" class="profile-pic">
+            <div>
+                <p>{{driverName}}</p>
+                <p>Booking Date: {{bookingDate}}</p>
+            </div>
+        </div>
+    </a>
+    {{/each}}
+</script>
