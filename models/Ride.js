@@ -17,6 +17,17 @@
 // models/Ride.js
 const mongoose = require('mongoose');
 
+const TimeSlotSchema = new mongoose.Schema({
+  hour: { type: Number, required: true, min: 0, max: 23 },
+  minute: { type: Number, required: true, min: 0, max: 59 }
+});
+
+const DayScheduleSchema = new mongoose.Schema({
+  active: { type: Boolean, default: false },
+  departureTime: TimeSlotSchema,
+  returnTime: TimeSlotSchema
+});
+
 const RideSchema = new mongoose.Schema({
   rideID: { 
     type: Number, 
@@ -40,13 +51,14 @@ const RideSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  departureTime: { 
-    type: Date, 
-    required: true 
-  },
-  returnTime: { 
-    type: Date, 
-    required: true 
+  schedule: {
+    monday: DayScheduleSchema,
+    tuesday: DayScheduleSchema,
+    wednesday: DayScheduleSchema,
+    thursday: DayScheduleSchema,
+    friday: DayScheduleSchema,
+    saturday: DayScheduleSchema,
+    sunday: DayScheduleSchema
   },
   numSeats: { 
     type: Number, 
@@ -63,7 +75,7 @@ const RideSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['active', 'completed', 'cancelled'],
+    enum: ['active', 'inactive'],
     default: 'active'
   }
 }, { timestamps: true });

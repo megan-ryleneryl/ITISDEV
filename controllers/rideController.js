@@ -68,6 +68,30 @@ async function postRide(req, res) {
   }
 }
 
+async function getEditRideForm(req, res) {
+  try {
+    const ride = await Ride.findOne({ rideID: req.params.id });
+    if (!ride) {
+      req.flash('error', 'Ride not found');
+      return res.redirect('/ride');
+    }
+    res.render('ride/edit', { 
+      title: 'Edit Ride',
+      css: ['ride.css'],
+      user: req.user,
+      ride: ride,
+      messages: {
+        error: req.flash('error'),
+        success: req.flash('success')
+      }
+    });
+  } catch (error) {
+    console.error('Error getting edit ride form:', error);
+    req.flash('error', 'Error loading edit form');
+    res.redirect('/ride');
+  }
+}
+
 async function editRide(req, res) {}
 
 async function deleteRide(req, res) {}
@@ -79,6 +103,7 @@ async function viewRideDetails(req, res) {}
 /* Allow functions to be used by other files */
 module.exports = {
     postRide,
+    getEditRideForm,
     editRide,
     deleteRide,
     viewRides,
