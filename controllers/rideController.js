@@ -1,41 +1,53 @@
 /* Import Models */
 // controllers/rideController.js
-const User = require('../models/User');
 const Ride = require('../models/Ride');
+const User = require('../models/User');
+const Booking = require('../models/Booking');
 
+// Get new ride form
+async function getNewRideForm(req, res) {
+  res.render('ride/new', { 
+    title: 'Post a New Ride',
+    css: ['ride.css'],
+    user: req.user,
+    messages: {
+      error: req.flash('error'),
+      success: req.flash('success')
+    }
+  });
+}
+
+// Post a new ride
 async function postRide(req, res) {
   try {
     const { 
       originCity,
       originAddress,
       university,
-      departureTime,
-      returnTime,
+      schedule,
       numSeats,
       price,
       description
     } = req.body;
 
-    // Assuming you have middleware to authenticate the user and attach user info to req.user
+    if (!req.isAuthenticated()) {
+      req.flash('error', 'You must be logged in to post a ride');
+      return res.redirect('/login');
+    }
+
     const driverID = req.user.userID;
 
     // Check if the driver has sufficient balance
     const driver = await User.findOne({ userID: driverID });
     if (!driver || driver.walletBalance <= 0) {
-      return res.render('error', { message: "Insufficient balance to post a ride" });
+      req.flash('error', 'Insufficient balance to post a ride');
+      return res.redirect('/ride/new');
     }
 
     // Validate input
     if (price < 50 || price > 1000) {
-      return res.render('error', { message: "Price must be between 50 and 1000 pesos" });
-    }
-
-    if (new Date(departureTime) <= new Date()) {
-      return res.render('error', { message: "Departure time must be in the future" });
-    }
-
-    if (new Date(returnTime) <= new Date(departureTime)) {
-      return res.render('error', { message: "Return time must be after departure time" });
+      req.flash('error', 'Price must be between 50 and 1000 pesos');
+      return res.redirect('/ride/new');
     }
 
     // Generate a new rideID
@@ -48,26 +60,74 @@ async function postRide(req, res) {
       originCity,
       originAddress,
       university,
-      departureTime,
-      returnTime,
+      schedule,
       numSeats,
       price,
-      description
+      description,
+      status: 'active'
     });
 
     await newRide.save();
 
-    // Render a success page or redirect to a ride list
-    res.render('ride-posted', { 
-      message: "Ride posted successfully", 
-      ride: newRide 
-    });
+    req.flash('success', 'Ride posted successfully');
+    res.redirect('/ride/' + newRide.rideID);
   } catch (error) {
     console.error('Error posting ride:', error);
-    res.render('error', { message: "Error posting ride", error: error.message });
+    req.flash('error', 'Error posting ride: ' + error.message);
+    res.redirect('/ride/new');
   }
 }
 
+// View all rides
+async function viewRides(req, res) {
+  try {
+    const rides = await Ride.find({ status: 'active' }).sort('-createdAt');
+    res.render('ride/index', { 
+      title: 'All Rides',
+      rides,
+      user: req.user,
+      messages: {
+        error: req.flash('error'),
+        success: req.flash('success')
+      }
+    });
+  } catch (error) {
+    console.error('Error viewing rides:', error);
+    req.flash('error', 'Error loading rides');
+    res.redirect('/');
+  }
+}
+
+// View a specific ride
+async function viewRideDetails(req, res) {
+  try {
+    const ride = await Ride.findOne({ rideID: req.params.id });
+    if (!ride) {
+      req.flash('error', 'Ride not found');
+      return res.redirect('/ride');
+    }
+    
+    // Get bookings for this ride
+    const bookings = await Booking.find({ rideID: ride.rideID });
+
+    res.render('ride/view', { 
+      title: 'Ride Details',
+      ride,
+      bookings,
+      user: req.user,
+      messages: {
+        error: req.flash('error'),
+        success: req.flash('success')
+      }
+    });
+  } catch (error) {
+    console.error('Error viewing ride details:', error);
+    req.flash('error', 'Error loading ride details');
+    res.redirect('/ride');
+  }
+}
+
+// Get edit ride form
 async function getEditRideForm(req, res) {
   try {
     const ride = await Ride.findOne({ rideID: req.params.id });
@@ -75,11 +135,14 @@ async function getEditRideForm(req, res) {
       req.flash('error', 'Ride not found');
       return res.redirect('/ride');
     }
+    if (ride.driverID !== req.user.userID) {
+      req.flash('error', 'You are not authorized to edit this ride');
+      return res.redirect('/ride');
+    }
     res.render('ride/edit', { 
       title: 'Edit Ride',
-      css: ['ride.css'],
+      ride,
       user: req.user,
-      ride: ride,
       messages: {
         error: req.flash('error'),
         success: req.flash('success')
@@ -92,20 +155,87 @@ async function getEditRideForm(req, res) {
   }
 }
 
-async function editRide(req, res) {}
+// Edit a ride
+async function editRide(req, res) {
+  try {
+    const { 
+      originCity,
+      originAddress,
+      university,
+      schedule,
+      numSeats,
+      price,
+      description
+    } = req.body;
 
-async function deleteRide(req, res) {}
+    const ride = await Ride.findOne({ rideID: req.params.id });
+    if (!ride) {
+      req.flash('error', 'Ride not found');
+      return res.redirect('/ride');
+    }
+    if (ride.driverID !== req.user.userID) {
+      req.flash('error', 'You are not authorized to edit this ride');
+      return res.redirect('/ride');
+    }
 
-async function viewRides(req, res) {}
+    // Update ride details
+    ride.originCity = originCity;
+    ride.originAddress = originAddress;
+    ride.university = university;
+    ride.schedule = schedule;
+    ride.numSeats = numSeats;
+    ride.price = price;
+    ride.description = description;
 
-async function viewRideDetails(req, res) {}
+    await ride.save();
 
-/* Allow functions to be used by other files */
-module.exports = {
-    postRide,
-    getEditRideForm,
-    editRide,
-    deleteRide,
-    viewRides,
-    viewRideDetails
+    req.flash('success', 'Ride updated successfully');
+    res.redirect('/ride/' + ride.rideID);
+  } catch (error) {
+    console.error('Error editing ride:', error);
+    req.flash('error', 'Error updating ride: ' + error.message);
+    res.redirect('/ride/' + req.params.id + '/edit');
+  }
 }
+
+// Delete a ride
+async function deleteRide(req, res) {
+  try {
+    const ride = await Ride.findOne({ rideID: req.params.id });
+    if (!ride) {
+      req.flash('error', 'Ride not found');
+      return res.redirect('/ride');
+    }
+    if (ride.driverID !== req.user.userID) {
+      req.flash('error', 'You are not authorized to delete this ride');
+      return res.redirect('/ride');
+    }
+
+    // Instead of deleting, set status to inactive
+    ride.status = 'inactive';
+    await ride.save();
+
+    // Cancel all pending bookings for this ride
+    await Booking.updateMany(
+      { rideID: ride.rideID, status: 'pending' },
+      { $set: { status: 'cancelled' } }
+    );
+
+    req.flash('success', 'Ride deleted successfully');
+    res.redirect('/ride');
+  } catch (error) {
+    console.error('Error deleting ride:', error);
+    req.flash('error', 'Error deleting ride: ' + error.message);
+    res.redirect('/ride');
+  }
+}
+
+module.exports = {
+  getNewRideForm,
+  postRide,
+  viewRides,
+  viewRideDetails,
+  getEditRideForm,
+  editRide,
+  deleteRide
+};
