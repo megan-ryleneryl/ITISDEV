@@ -1,4 +1,3 @@
-/* Import Models */
 // controllers/rideController.js
 const Ride = require('../models/Ride');
 const User = require('../models/User');
@@ -7,7 +6,7 @@ const Booking = require('../models/Booking');
 // Get new ride form
 async function getNewRideForm(req, res) {
   res.render('ride/new', { 
-    title: 'Post a New Ride',
+    title: 'Publish a New Ride',
     css: ['ride.css'],
     user: req.user,
     messages: {
@@ -21,13 +20,15 @@ async function getNewRideForm(req, res) {
 async function postRide(req, res) {
   try {
     const { 
-      originCity,
-      originAddress,
-      university,
-      schedule,
+      rideType,
+      pickupPoint,
+      dropoffPoint,
+      route,
+      pickupAreas,
+      availableDays,
+      departureTime,
       numSeats,
-      price,
-      description
+      price
     } = req.body;
 
     if (!req.isAuthenticated()) {
@@ -57,19 +58,21 @@ async function postRide(req, res) {
     const newRide = new Ride({
       rideID: newRideID,
       driverID,
-      originCity,
-      originAddress,
-      university,
-      schedule,
+      rideType,
+      pickupPoint,
+      dropoffPoint,
+      route,
+      pickupAreas,
+      availableDays,
+      departureTime,
       numSeats,
       price,
-      description,
       status: 'active'
     });
 
     await newRide.save();
 
-    req.flash('success', 'Ride posted successfully');
+    req.flash('success', 'Ride published successfully');
     res.redirect('/ride/' + newRide.rideID);
   } catch (error) {
     console.error('Error posting ride:', error);
@@ -159,13 +162,15 @@ async function getEditRideForm(req, res) {
 async function editRide(req, res) {
   try {
     const { 
-      originCity,
-      originAddress,
-      university,
-      schedule,
+      rideType,
+      pickupPoint,
+      dropoffPoint,
+      route,
+      pickupAreas,
+      availableDays,
+      departureTime,
       numSeats,
-      price,
-      description
+      price
     } = req.body;
 
     const ride = await Ride.findOne({ rideID: req.params.id });
@@ -179,13 +184,15 @@ async function editRide(req, res) {
     }
 
     // Update ride details
-    ride.originCity = originCity;
-    ride.originAddress = originAddress;
-    ride.university = university;
-    ride.schedule = schedule;
+    ride.rideType = rideType;
+    ride.pickupPoint = pickupPoint;
+    ride.dropoffPoint = dropoffPoint;
+    ride.route = route;
+    ride.pickupAreas = pickupAreas;
+    ride.availableDays = availableDays;
+    ride.departureTime = departureTime;
     ride.numSeats = numSeats;
     ride.price = price;
-    ride.description = description;
 
     await ride.save();
 

@@ -13,10 +13,7 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login');
 };
 
-// Route to display the form for posting a new ride
 router.get('/new', isAuthenticated, rideController.getNewRideForm);
-
-// Other routes remain the same
 router.post('/', isAuthenticated, rideController.postRide);
 router.get('/', rideController.viewRides);
 router.get('/:id', rideController.viewRideDetails);
