@@ -13,7 +13,7 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login');
 };
 
-router.get('/new', isAuthenticated, rideController.getNewRideForm);
+router.get('/new', rideController.getNewRideForm);
 router.post('/', isAuthenticated, rideController.postRide);
 router.get('/', rideController.viewRides);
 router.get('/:id', rideController.viewRideDetails);
