@@ -81,4 +81,24 @@
                 defaultDate: "today"
             });
         });
+
+        function swapLocations() {
+            const pickup = document.getElementById('pickup');
+            const dropoff = document.getElementById('dropoff');
+
+            const pickupSelectedIndex = pickup.selectedIndex;
+            const dropoffSelectedIndex = dropoff.selectedIndex;
+
+            pickup.selectedIndex = dropoffSelectedIndex;
+            dropoff.selectedIndex = pickupSelectedIndex;
+
+            // Swap the placeholder text
+            const pickupPlaceholder = pickup.options[0].text;
+            const dropoffPlaceholder = dropoff.options[0].text;
+            pickup.options[0].text = dropoffPlaceholder;
+            dropoff.options[0].text = pickupPlaceholder;
+        }
+        
     </script>
+
+

@@ -87,7 +87,7 @@ app.use('/chat', chatRoutes); // Use the chatRoutes module for all routes starti
 app.get('/', (req, res) => {
     res.render('index', {
         title: "Uniride",
-        css: ["index.css"], // Ensure 'index.css' is inside the 'public/css' directory
+        css: ["index.css"], 
         layout: "main",
         messages: req.flash('error')
     });
