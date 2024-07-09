@@ -43,6 +43,7 @@ const hbs = exphbs.create({
         allowProtoPropertiesByDefault: true,
         allowProtoMethodsByDefault: true,
     }
+    
 });
 
 app.use(express.json());
@@ -62,16 +63,6 @@ app.use(passport.session());
 
 app.use(methodOverride('_method')); // To allow the POST logout form to become a DELETE request
 
-// Make login the landing page
-app.get('/', (req, res) => {
-    // If user is authenticated, redirect to homepage
-    if (req.isAuthenticated()) {
-        res.redirect('/homepage');
-    } else {
-        // If user is not authenticated, redirect to login page
-        res.redirect('/login');
-    }
-});
 
 // For about page -> Idk if we still need this, but this is where i listed my specs
 // app.get('/about', (req, res) => {
@@ -93,39 +84,39 @@ app.use('/contest', contestRoutes); // Use the contestRoutes module for all rout
 app.use('/chat', chatRoutes); // Use the chatRoutes module for all routes starting with /chat
 
 // Login Routes -> This bugged when I tried implementing it in a separate route
-app.get('/login', (req, res) => {
-    res.render('../views/index.hbs', {
-        title: "Login",
-        css: ["index.css"],
-        layout: "bodyOnly.hbs",
+app.get('/', (req, res) => {
+    res.render('index', {
+        title: "Uniride",
+        css: ["index.css"], // Ensure 'index.css' is inside the 'public/css' directory
+        layout: "main",
         messages: req.flash('error')
-    })
+    });
 });
 
-app.post('/login', 
-    passport.authenticate('local', {
-        failureRedirect: '/login',
-        failureFlash: true
-    }),
-    function(req, res) {
-        // This function is for checking if remember me was clicked
-        if (req.body.rememberMe) {
-            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000; // Cookie expires after 3 weeks
-        } else {
-            req.session.cookie.expires = false; // Cookie expires at end of session
-        }
-      res.redirect('/homepage'); 
-    }
-);
+// app.post('/login', 
+//     passport.authenticate('local', {
+//         failureRedirect: '/login',
+//         failureFlash: true
+//     }),
+//     function(req, res) {
+//         // This function is for checking if remember me was clicked
+//         if (req.body.rememberMe) {
+//             req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000; // Cookie expires after 3 weeks
+//         } else {
+//             req.session.cookie.expires = false; // Cookie expires at end of session
+//         }
+//       res.redirect('/index'); 
+//     }
+// );
 
-app.delete('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) {
-            return next(err);
-        }
-        res.redirect('/');
-    });
-})
+// app.delete('/logout', (req, res) => {
+//     req.logout((err) => {
+//         if (err) {
+//             return next(err);
+//         }
+//         res.redirect('/');
+//     });
+// })
 
 /* Connect to MongoDB and then Listen for Requests */
 /**
