@@ -4,7 +4,7 @@
   <h1>Publish a New Ride</h1>
 
 
-  <form action="/ride" method="POST">
+  <form action="/ride/postRide" method="POST">
     <div>
       <label for="rideType">Ride Type:</label>
       <select id="rideType" name="rideType" required>
@@ -25,7 +25,7 @@
 
     <div>
       <label for="route">Route (Optional):</label>
-      <textarea id="route" name="route"></textarea>
+      <textarea id="route" name="route" placeholder="e.g. via Osmena Highway"></textarea>
     </div>
 
     <div>
@@ -72,7 +72,7 @@
 
     <div>
       <label for="numSeats">Number of Passengers:</label>
-      <input type="number" id="numSeats" name="numSeats" min="1" required>
+      <input type="number" id="numSeats" name="numSeats" min="1" max="5" required>
     </div>
 
     <div>

@@ -17,6 +17,8 @@ async function getNewRideForm(req, res) {
 }
 
 // Post a new ride
+// controllers/rideController.js
+
 async function postRide(req, res) {
   try {
     const { 
@@ -31,12 +33,15 @@ async function postRide(req, res) {
       price
     } = req.body;
 
-    if (!req.isAuthenticated()) {
-      req.flash('error', 'You must be logged in to post a ride');
-      return res.redirect('/login');
-    }
+    // if (!req.isAuthenticated()) {
+    //   req.flash('error', 'You must be logged in to post a ride');
+    //   return res.redirect('/login');
+    // }
 
-    const driverID = req.user.userID;
+    // const driverID = req.user.userID;
+
+    // Temporary driverID for testing
+    const driverID = 20001;
 
     // Check if the driver has sufficient balance
     const driver = await User.findOne({ userID: driverID });
@@ -45,15 +50,17 @@ async function postRide(req, res) {
       return res.redirect('/ride/new');
     }
 
-    // Validate input
-    if (price < 50 || price > 1000) {
-      req.flash('error', 'Price must be between 50 and 1000 pesos');
-      return res.redirect('/ride/new');
-    }
-
     // Generate a new rideID
     const lastRide = await Ride.findOne().sort('-rideID');
     const newRideID = lastRide ? lastRide.rideID + 1 : 30001;
+
+    // Parse departure time
+    const [hours, minutes] = departureTime.split(':').map(Number);
+
+    if (isNaN(hours) || isNaN(minutes)) {
+      req.flash('error', 'Invalid departure time format');
+      return res.redirect('/ride/new');
+    }
 
     const newRide = new Ride({
       rideID: newRideID,
@@ -62,11 +69,14 @@ async function postRide(req, res) {
       pickupPoint,
       dropoffPoint,
       route,
-      pickupAreas,
-      availableDays,
-      departureTime,
-      numSeats,
-      price,
+      pickupAreas: pickupAreas ? pickupAreas.split(',').map(area => area.trim()) : [],
+      availableDays: Array.isArray(availableDays) ? availableDays : [availableDays],
+      departureTime: {
+        hour: hours,
+        minute: minutes
+      },
+      numSeats: parseInt(numSeats),
+      price: parseFloat(price),
       status: 'active'
     });
 
@@ -113,7 +123,8 @@ async function viewRideDetails(req, res) {
     // Get bookings for this ride
     const bookings = await Booking.find({ rideID: ride.rideID });
 
-    res.render('ride/view', { 
+
+    res.render('ride/details', { 
       title: 'Ride Details',
       ride,
       bookings,

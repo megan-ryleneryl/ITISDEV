@@ -37,6 +37,18 @@ const hbs = exphbs.create({
         // JSON
         json: function (context) {
             return JSON.stringify(context);
+        },
+        eq: function (a, b) {
+            return a === b;
+        },
+        join: function (arr, separator) {
+        return arr.join(separator);
+        },
+        formatTime: function (hour, minute) {
+        return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        },
+        formatDate: function (date) {
+        return new Date(date).toLocaleDateString();
         }
     },
     runtimeOptions: {

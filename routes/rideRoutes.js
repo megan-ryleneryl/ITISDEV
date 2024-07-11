@@ -14,8 +14,8 @@ const isAuthenticated = (req, res, next) => {
 };
 
 router.get('/new', rideController.getNewRideForm);
-router.post('/', isAuthenticated, rideController.postRide);
-router.get('/', rideController.viewRides);
+router.post('/postRide', rideController.postRide);
+router.get('/viewRides', rideController.viewRides);
 router.get('/:id', rideController.viewRideDetails);
 router.get('/:id/edit', isAuthenticated, rideController.getEditRideForm);
 router.put('/:id', isAuthenticated, rideController.editRide);

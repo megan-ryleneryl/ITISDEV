@@ -26,8 +26,7 @@ const RideSchema = new mongoose.Schema({
     required: true
   },
   route: {
-    type: String,
-    required: true
+    type: String
   },
   pickupAreas: [{
     type: String
