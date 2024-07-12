@@ -4,6 +4,25 @@ const exphbs = require('express-handlebars'); // Import Express-Handlebars, allo
 const mongoose = require('mongoose'); // Import Mongoose, allows you to connect to MongoDB
 const bodyParser = require('body-parser');
 
+/* Connect to MongoDB and then Listen for Requests */
+/**
+ * admin is the username
+ * 12345 is the password
+ * itisdev-mvp is the database name
+ */
+const dbURI = 'mongodb+srv://admin:12345@itisdev-mvp.jary1la.mongodb.net/itisdev-mvp'; 
+mongoose.connect(dbURI)
+    .then((result) => {
+        console.log("App connected to MongoDB Atlas itisdev-mvp database.");
+        /* If the DB connection was successful, listen for requests on localhost:3000 */
+        app.listen(3000, () => {
+            console.log("App started. Listening on port 3000.");
+        });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
 // Imported for sessions
 const passport = require('passport');
 const flash = require('express-flash');
@@ -95,15 +114,31 @@ app.use('/review', reviewRoutes); // Use the reviewRoutes module for all routes 
 app.use('/contest', contestRoutes); // Use the contestRoutes module for all routes starting with /contest
 app.use('/chat', chatRoutes); // Use the chatRoutes module for all routes starting with /chat
 
-// Login Routes -> This bugged when I tried implementing it in a separate route
+const University = require('./models/University');
+
 app.get('/', (req, res) => {
-    res.render('index', {
-        title: "Uniride",
-        css: ["index.css"], 
-        layout: "main",
-        messages: req.flash('error')
-    });
+    // get universities from db
+    University.find()
+        .then((universities) => {
+            const universityNames = universities.map(university => university.name);
+
+            // display in cmd
+            console.log(universityNames);
+
+            res.render('index', {
+                title: "Uniride",
+                dropoffLocations: universityNames,
+                css: ["index.css"], 
+                layout: "main",
+                messages: req.flash('error')
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).send('Error retrieving universities');
+        });
 });
+
 
 // app.post('/login', 
 //     passport.authenticate('local', {
@@ -130,21 +165,3 @@ app.get('/', (req, res) => {
 //     });
 // })
 
-/* Connect to MongoDB and then Listen for Requests */
-/**
- * admin is the username
- * 12345 is the password
- * itisdev-mvp is the database name
- */
-const dbURI = 'mongodb+srv://admin:12345@itisdev-mvp.jary1la.mongodb.net/itisdev-mvp'; 
-mongoose.connect(dbURI)
-    .then((result) => {
-        console.log("App connected to MongoDB Atlas itisdev-mvp database.");
-        /* If the DB connection was successful, listen for requests on localhost:3000 */
-        app.listen(3000, () => {
-            console.log("App started. Listening on port 3000.");
-        });
-    })
-    .catch((err) => {
-        console.log(err);
-    });

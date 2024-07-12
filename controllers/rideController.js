@@ -3,11 +3,25 @@ const Ride = require('../models/Ride');
 const User = require('../models/User');
 const Booking = require('../models/Booking');
 
+//show driver home page
+async function getDriverHome(req, res) {
+  res.render('ride/driverhome', { 
+    title: 'Driver Home',
+    css: ['ride.css'],
+    user: req.user,
+    messages: {
+      error: req.flash('error'),
+      success: req.flash('success')
+    }
+  });
+}
+
+
 // Get new ride form
 async function getNewRideForm(req, res) {
   res.render('ride/new', { 
     title: 'Publish a New Ride',
-    css: ['ride.css'],
+    css: ['index.css','ride.css'],
     user: req.user,
     messages: {
       error: req.flash('error'),
@@ -249,6 +263,7 @@ async function deleteRide(req, res) {
 }
 
 module.exports = {
+  getDriverHome,
   getNewRideForm,
   postRide,
   viewRides,

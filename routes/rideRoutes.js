@@ -13,6 +13,8 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login');
 };
 
+router.get('/driverhome', rideController.getDriverHome);
+
 router.get('/new', rideController.getNewRideForm);
 router.post('/postRide', rideController.postRide);
 router.get('/viewRides', rideController.viewRides);

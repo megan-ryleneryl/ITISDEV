@@ -5,15 +5,17 @@
 
         <div class="hero-input">
             <form class="ride-search-form">
-                <select name="pickup">
-                    <option value="" disabled selected>Pickup from</option>
+                <label>Pickup</label>
+                <select name="pickup" id ="pickup">
+                    <option value="" disabled selected>Home</option>
                     {{#each pickupLocations}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </select>
                 <button type="button" class="exchange-button" onclick="swapLocations()">↔</button>
-                <select name="dropoff">
-                    <option value="" disabled selected>Drop-off at University</option>
+                <label>Drop-off</label>
+                <select name="dropoff" id="dropoff">
+                    <option value="" disabled selected>University</option>
                     {{#each dropoffLocations}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
