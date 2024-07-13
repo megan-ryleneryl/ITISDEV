@@ -1,0 +1,43 @@
+<h2>Upcoming Rides</h2>
+{{#if upcomingRides.length}}
+  <ul>
+    {{#each upcomingRides}}
+      <li>
+        <strong>Ride ID:</strong> {{rideID}}<br>
+        <strong>Route:</strong> {{route}}<br>
+        <strong>Date of Travel:</strong> {{travelDate}}<br>
+        <strong>Time of Travel:</strong> {{travelTime}}<br>
+        <strong>Pick Up Location:</strong> {{pickupLocation}}<br>
+        <strong>Drop Off Location:</strong> {{dropoffLocation}}<br>
+        <strong>Driver:</strong> {{driver}}<br>
+        <strong>Price:</strong> ₱{{price}}<br>
+        <button onclick="cancelRide('{{rideID}}', '{{travelDate}}', '{{travelTime}}', {{price}})">Cancel Ride</button>
+      </li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No upcoming rides.</p>
+{{/if}}
+
+{{#if isDriver}}
+  <h2>My Posted Rides</h2>
+  {{#if postedRides.length}}
+    <ul>
+      {{#each postedRides}}
+        <li>
+          <strong>Ride ID:</strong> {{rideID}}<br>
+          <strong>Route:</strong> {{route}}<br>
+          <strong>Date of Travel:</strong> {{travelDate}}<br>
+          <strong>Time of Travel:</strong> {{travelTime}}<br>
+          <strong>Pick Up Location:</strong> {{pickupLocation}}<br>
+          <strong>Drop Off Location:</strong> {{dropoffLocation}}<br>
+          <strong>Price per Seat:</strong> ₱{{price}}<br>
+          <strong>Passengers:</strong> {{passengers}}<br>
+          <button onclick="cancelPostedRide('{{rideID}}', '{{travelDate}}', '{{travelTime}}', {{passengers}})">Cancel Posted Ride</button>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>No posted rides.</p>
+  {{/if}}
+{{/if}}
