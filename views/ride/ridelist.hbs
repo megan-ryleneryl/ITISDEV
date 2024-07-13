@@ -1,0 +1,84 @@
+
+<div class="ride-list-container">
+  <h1>Available Rides</h1>
+
+  {{#if rides.length}}
+    {{#each rides}}
+      <div class="ride-item">
+        <div class="ride-main-info">
+          <div class="ride-time">
+            <span class="departure">{{formatTime departureTime.hour departureTime.minute}}</span>
+            <span class="arrow">→</span>
+            <span class="arrival">{{formatTime arrivalTime.hour arrivalTime.minute}}</span>
+          </div>
+          <div class="ride-route">
+            <span class="pickup">{{pickupPoint}}</span>
+            <span class="arrow">→</span>
+            <span class="dropoff">{{dropoffPoint}}</span>
+          </div>
+        </div>
+        <div class="ride-details">
+          <div class="ride-driver">
+            <span class="driver-name">{{driverName}}</span>
+            <span class="driver-rating">★ 4.5</span>
+          </div>
+          <div class="ride-info">
+            <span class="seats">{{numSeats}} seats available</span>
+            <span class="price">₱{{price}}</span>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  {{else}}
+    <p class="no-rides">No rides available at the moment.</p>
+  {{/if}}
+</div>
+
+<style>
+  .ride-list-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 50px;
+  }
+  .ride-item {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .ride-main-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .ride-time, .ride-route {
+    display: flex;
+    align-items: center;
+  }
+  .arrow {
+    margin: 0 10px;
+    color: #777;
+  }
+  .ride-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .ride-driver, .ride-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .driver-rating {
+    color: #ffc107;
+  }
+  .price {
+    font-weight: bold;
+    color: #28a745;
+  }
+  .no-rides {
+    text-align: center;
+    color: #777;
+  }
+</style>

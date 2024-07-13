@@ -115,29 +115,34 @@ app.use('/contest', contestRoutes); // Use the contestRoutes module for all rout
 app.use('/chat', chatRoutes); // Use the chatRoutes module for all routes starting with /chat
 
 const University = require('./models/University');
+const City = require('./models/City');
 
 app.get('/', (req, res) => {
-    // get universities from db
-    University.find()
-        .then((universities) => {
+    // Get universities and cities from db concurrently
+    Promise.all([University.find(), City.find()])
+        .then(([universities, cities]) => {
             const universityNames = universities.map(university => university.name);
+            const cityNames = cities.map(city => city.name);
 
-            // display in cmd
-            console.log(universityNames);
+            // Display in cmd
+            console.log('Universities:', universityNames);
+            console.log('Cities:', cityNames);
 
             res.render('index', {
                 title: "Uniride",
                 dropoffLocations: universityNames,
+                pickupLocations: cityNames,
                 css: ["index.css"], 
                 layout: "main",
                 messages: req.flash('error')
             });
         })
         .catch((err) => {
-            console.log(err);
-            res.status(500).send('Error retrieving universities');
+            console.error(err);
+            res.status(500).send('Error retrieving data');
         });
 });
+
 
 
 // app.post('/login', 

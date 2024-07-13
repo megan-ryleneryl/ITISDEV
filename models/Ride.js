@@ -39,6 +39,11 @@ const RideSchema = new mongoose.Schema({
     hour: { type: Number, required: true, min: 0, max: 23 },
     minute: { type: Number, required: true, min: 0, max: 59 }
   },
+
+  arrivalTime: {
+    hour: { type: Number, required: true, min: 0, max: 23 },
+    minute: { type: Number, required: true, min: 0, max: 59 }
+  },
   numSeats: { 
     type: Number, 
     required: true 

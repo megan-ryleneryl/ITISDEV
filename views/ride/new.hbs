@@ -1,85 +1,133 @@
-
 <div class="ride-wrapper">
-  
-  <h1>Publish a New Ride</h1>
+    <h1>Publish a New Ride</h1>
+    <form action="/ride/postRide" method="POST" id="rideForm">
+        <div>
+            <label for="rideType">Ride Type:</label>
+            <select id="rideType" name="rideType" required onchange="toggleRideType()">
+                <option value="toUniversity">From Home to University</option>
+                <option value="fromUniversity">From University to Home</option>
+            </select>
+        </div>
 
+        <div id="pickupContainer">
+            <label for="pickupPoint">Pickup Location:</label>
+            <select id="pickupPoint" name="pickupPoint" required>
+                {{#each pickupLocations}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
 
-  <form action="/ride/postRide" method="POST">
-    <div>
-      <label for="rideType">Ride Type:</label>
-      <select id="rideType" name="rideType" required>
-        <option value="toUniversity">From Home to University</option>
-        <option value="fromUniversity">From University to Home</option>
-      </select>
-    </div>
+        <div id="dropoffContainer">
+            <label for="dropoffPoint">Dropoff Location:</label>
+            <select id="dropoffPoint" name="dropoffPoint" required>
+                {{#each dropoffLocations}}
+                <option value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
 
-    <div>
-      <label for="pickupPoint">Pickup Location:</label>
-      <input type="text" id="pickupPoint" name="pickupPoint" required>
-    </div>
+        <div>
+            <label for="route">Route (Optional):</label>
+            <textarea id="route" name="route" placeholder="e.g. via Osmena Highway"></textarea>
+        </div>
 
-    <div>
-      <label for="dropoffPoint">Dropoff Location:</label>
-      <input type="text" id="dropoffPoint" name="dropoffPoint" required>
-    </div>
+        <div>
+            <label for="pickupAreas">Additional Pickup Areas (Optional, comma-separated):</label>
+            <input type="text" id="pickupAreas" name="pickupAreas">
+        </div>
 
-    <div>
-      <label for="route">Route (Optional):</label>
-      <textarea id="route" name="route" placeholder="e.g. via Osmena Highway"></textarea>
-    </div>
+        <div>
+            <label>Available Days:</label>
+            <div>
+                <input type="checkbox" id="monday" name="availableDays" value="monday">
+                <label for="monday">Monday</label>
+            </div>
+            <div>
+                <input type="checkbox" id="tuesday" name="availableDays" value="tuesday">
+                <label for="tuesday">Tuesday</label>
+            </div>
+            <div>
+                <input type="checkbox" id="wednesday" name="availableDays" value="wednesday">
+                <label for="wednesday">Wednesday</label>
+            </div>
+            <div>
+                <input type="checkbox" id="thursday" name="availableDays" value="thursday">
+                <label for="thursday">Thursday</label>
+            </div>
+            <div>
+                <input type="checkbox" id="friday" name="availableDays" value="friday">
+                <label for="friday">Friday</label>
+            </div>
+            <div>
+                <input type="checkbox" id="saturday" name="availableDays" value="saturday">
+                <label for="saturday">Saturday</label>
+            </div>
+            <div>
+                <input type="checkbox" id="sunday" name="availableDays" value="sunday">
+                <label for="sunday">Sunday</label>
+            </div>
+        </div>
 
-    <div>
-      <label for="pickupAreas">Additional Pickup Areas (Optional, comma-separated):</label>
-      <input type="text" id="pickupAreas" name="pickupAreas">
-    </div>
+        <div>
+            <label for="departureTime">Departure Time:</label>
+            <input type="time" id="departureTime" name="departureTime" required>
+        </div>
 
-    <div>
-      <label>Available Days:</label>
-      <div>
-        <input type="checkbox" id="monday" name="availableDays" value="monday">
-        <label for="monday">Monday</label>
-      </div>
-      <div>
-        <input type="checkbox" id="tuesday" name="availableDays" value="tuesday">
-        <label for="tuesday">Tuesday</label>
-      </div>
-      <div>
-        <input type="checkbox" id="wednesday" name="availableDays" value="wednesday">
-        <label for="wednesday">Wednesday</label>
-      </div>
-      <div>
-        <input type="checkbox" id="thursday" name="availableDays" value="thursday">
-        <label for="thursday">Thursday</label>
-      </div>
-      <div>
-        <input type="checkbox" id="friday" name="availableDays" value="friday">
-        <label for="friday">Friday</label>
-      </div>
-      <div>
-        <input type="checkbox" id="saturday" name="availableDays" value="saturday">
-        <label for="saturday">Saturday</label>
-      </div>
-      <div>
-        <input type="checkbox" id="sunday" name="availableDays" value="sunday">
-        <label for="sunday">Sunday</label>
-      </div>
-    </div>
+        <div>
+            <label for="numSeats">Number of Passengers:</label>
+            <input type="number" id="numSeats" name="numSeats" min="1" max="4" required>
+        </div>
 
-    <div>
-      <label for="departureTime">Departure Time:</label>
-      <input type="time" id="departureTime" name="departureTime" required>
-    </div>
+        <div>
+            <label for="price">Price per Seat (PHP):</label>
+            <input type="number" id="price" name="price" min="50" max="1000" required>
+        </div>
 
-    <div>
-      <label for="numSeats">Number of Passengers:</label>
-      <input type="number" id="numSeats" name="numSeats" min="1" max="4" required>
-    </div>
-
-    <div>
-      <label for="price">Price per Seat (PHP):</label>
-      <input type="number" id="price" name="price" min="50" max="1000" required>
-    </div>
-
-    <button type="submit">Publish Ride</button>
-  </form>
+        <button type="submit">Publish Ride</button>
+    </form>
 </div>
+
+<script>
+    function toggleRideType() {
+        const rideType = document.getElementById('rideType').value;
+        const pickupContainer = document.getElementById('pickupContainer');
+        const dropoffContainer = document.getElementById('dropoffContainer');
+        
+        if (rideType === 'toUniversity') {
+            pickupContainer.innerHTML = `
+                <label for="pickupPoint">Pickup Location:</label>
+                <select id="pickupPoint" name="pickupPoint" required>
+                    {{#each pickupLocations}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            `;
+            dropoffContainer.innerHTML = `
+                <label for="dropoffPoint">Dropoff Location:</label>
+                <select id="dropoffPoint" name="dropoffPoint" required>
+                    {{#each dropoffLocations}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            `;
+        } else {
+            pickupContainer.innerHTML = `
+                <label for="pickupPoint">Pickup Location:</label>
+                <select id="pickupPoint" name="pickupPoint" required>
+                    {{#each dropoffLocations}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            `;
+            dropoffContainer.innerHTML = `
+                <label for="dropoffPoint">Dropoff Location:</label>
+                <select id="dropoffPoint" name="dropoffPoint" required>
+                    {{#each pickupLocations}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+            `;
+        }
+    }
+</script>
