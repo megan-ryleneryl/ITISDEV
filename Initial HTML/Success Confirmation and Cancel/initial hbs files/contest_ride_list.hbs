@@ -1,0 +1,24 @@
+<div class="contest-ride-list">
+  <h2>Your Contest Submissions</h2>
+  
+  {{#if contests.length}}
+    <ul>
+      {{#each contests}}
+        <li>
+          <h3>Contest for Ride ID: {{rideId}}</h3>
+          <p><strong>Description:</strong> {{description}}</p>
+          {{#if supportingDocuments}}
+            <p><strong>Supporting Documents:</strong></p>
+            <ul>
+              {{#each supportingDocuments}}
+                <li><a href="{{this.url}}" target="_blank">{{this.name}}</a></li>
+              {{/each}}
+            </ul>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>You have not submitted any contests.</p>
+  {{/if}}
+</div>
