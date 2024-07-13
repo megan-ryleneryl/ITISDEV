@@ -8,8 +8,8 @@ const City = require('../models/City');
 //show driver home page
 async function getDriverHome(req, res) {
   res.render('ride/driverhome', { 
-    title: 'Driver Home',
-    css: ['ride.css'],
+    title: 'Post Ride',
+    css: ['index.css'],
     user: req.user,
     messages: {
       error: req.flash('error'),

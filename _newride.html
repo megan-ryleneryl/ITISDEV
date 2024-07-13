@@ -1,3 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="_index.css">
+    <link rel="stylesheet" href="_ride.css">
+    <!-- <link rel="stylesheet" href="/css/index.css"> -->
+
+    <script src="https://kit.fontawesome.com/6c86c27b89.js" crossorigin="anonymous"></script>
+
+    <title>UniRide</title>
+</head>
+     
+<body>
+    <header>
+        <div class="header-container">
+            <img src="public\img\UniRide text.svg" alt="UniRide Logo" class="logo">
+                <ul class="nav-links">
+                    <li><a href="#">Search</a></li>
+                    <li><a href="_ridecreate.html">Create a Ride</a></li>
+                    <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
+                </ul>
+        </div>
+    </header>
+
 <div class="ride-wrapper">
     <div class="ridecard">
         <div class="ridefirstinfo">
@@ -12,7 +44,7 @@
                 </div>
         
                 <div class="ridelocation">
-                    <div id="pickupContainer">
+                    <div class="pickupContainer">
                         <label for="pickupPoint">Pickup Location:</label>
                         <select id="pickupPoint" name="pickupPoint" required>
                             {{#each pickupLocations}}
@@ -21,7 +53,7 @@
                         </select>
                     </div>
             
-                    <div id="dropoffContainer">
+                    <div class="dropoffContainer">
                         <label for="dropoffPoint">Dropoff Location:</label>
                         <select id="dropoffPoint" name="dropoffPoint" required>
                             {{#each dropoffLocations}}
@@ -94,6 +126,8 @@
         </div>
     </div>
 </div>
+
+</body>
 
 <script>
     function toggleRideType() {

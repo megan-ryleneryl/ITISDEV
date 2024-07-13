@@ -7,3 +7,152 @@ width: 100%;
 margin-top: 100px;
 }
 
+input[type="text"], input[type="number"], input[type="email"], input[type="password"], input[type='time'],select, textarea{
+  border: none;
+  padding: 2px;
+  height: 20px;
+  border-radius: 4px;
+}
+
+.ridecard{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 920px;
+  height: 350px;
+  padding: 50px;
+  background-color: var(--quaternary-color);
+  color: var(--quinary-color);
+  border-radius: 10px;
+  margin: 10px 10px;
+}
+
+.ridefirstinfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.ridefirstinfo h1{
+  color: var(--senary-color);
+}
+
+.ridetype{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 330px;
+  margin-bottom: 15px;
+}
+
+.ridelocation{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+#pickupContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#dropoffContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#pickupPoint{
+  width: 160px;
+}
+
+#dropoffPoint{
+  width: 160px;
+}
+
+#route{
+  max-width: 330px;
+  max-height: 70px;
+  margin-bottom: 15px;
+}
+
+#pickupAreas{
+  width: 330px;
+}
+
+.ridedetails{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ridesecondinfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border: none;
+}
+
+.ridesched {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--secondary-color);
+  border-radius: 28px;
+  padding: 10px;
+
+}
+
+.day-container {
+  display: inline-block;
+  text-align: center;
+  margin: 5px;
+}
+
+.day-container input[type="checkbox"] {
+  display: none;
+}
+
+.day-container label {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  color: #000;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.day-container input[type="checkbox"]:checked + label {
+  background-color: #E64401;
+  color: #ffffff;
+}
+
+.rideotherdetails{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ridepublish{
+  height: 30px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: var(--secondary-color);
+  background-color: var(--primary-color);
+}
+
+.ridepublish:hover{
+  background-color: #af3500;
+  color: #ffffff;
+}

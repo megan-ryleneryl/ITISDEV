@@ -160,3 +160,40 @@
     width: 50%;
     padding: 20px;
 }
+
+.drive-info{
+    width: 50%;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.drive-info-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 50px 20%;
+}
+
+.publish-ride{
+    position: absolute;
+    top: 60%;
+    width: 330px;
+    height: 90px;
+    left: 50%;
+    border-radius: 78px;
+    color: var(--tertiary-color);
+    background-color: var(--primary-color);
+    transform: translate(-50%, 0%);
+    border-style: none;
+    font-size: 32px;
+    cursor: pointer;
+}
+
+.publish-ride:hover{
+    background-color: var(--tertiary-color);
+    color: var(--primary-color);
+    
+}
