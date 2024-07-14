@@ -1,0 +1,31 @@
+{{!-- views/profile.hbs --}}
+{{!< main }}
+<div class="container mt-3">
+    <div class="row mb-4">
+        <div class="col-md-3 text-center">
+            <img src="/{{profilePic}}" alt="Profile Picture" class="img-thumbnail">
+        </div>
+        <div class="col-md-9">
+            <h1 class="display-4" id="profileName">{{name}}</h1>
+            <p class="lead">{{role}} <span class="badge badge-success">Verified</span></p>
+            <a href="/edit-profile" class="btn btn-orange">Edit</a>
+            <h4 class="mt-4">Description</h4>
+            <p id="profileDescription">{{description}}</p>
+            <h4>Account Verified!</h4>
+            <ul class="list-group">
+                {{#each verificationItems}}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{item}}
+                        {{#if verified}}
+                            <span class="badge badge-success badge-pill">✔</span>
+                        {{else}}
+                            <span class="badge badge-danger badge-pill">✖</span>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+    <h4>Reviews</h4>
+    <div class="reviews-placeholder"></div>
+</div>

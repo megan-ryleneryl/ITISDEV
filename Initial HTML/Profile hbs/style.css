@@ -1,0 +1,150 @@
+/* public/css/style.css */
+
+.container {
+    max-width: 960px;
+    margin: auto;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.img-thumbnail {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.display-4 {
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    display: inline-block;
+    text-align: center;
+    border-radius: 0.25rem;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-orange {
+    background-color: #ff6600;
+    color: white;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.balance-display {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 1rem 0;
+}
+
+.reviews-placeholder {
+    height: 200px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+
+/* General styles for the account page */
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+h1 {
+    font-weight: bold;
+}
+
+.text-muted {
+    color: #6c757d;
+}
+
+.balance-box {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.btn-orange {
+    background-color: #ff6600;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.btn-orange:hover {
+    background-color: #e65c00;
+}
+
+.img-thumbnail {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.btn-link {
+    color: #007bff;
+}
+
+.btn-link:hover {
+    text-decoration: none;
+    color: #0056b3;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.modal-footer {
+    justify-content: center;
+}
