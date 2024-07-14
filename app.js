@@ -68,6 +68,25 @@ const hbs = exphbs.create({
         },
         formatDate: function (date) {
         return new Date(date).toLocaleDateString();
+        },
+        formatMonth(date) {
+        return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' }).format(date);
+        }, 
+        isEndOfWeek(index) {
+            return (index + 1) % 7 === 0;
+        },
+        formatDuration(startTime, endTime) {
+            const start = new Date(startTime);
+            const end = new Date(endTime);
+            const durationMs = end - start;
+            const hours = Math.floor(durationMs / (1000 * 60 * 60));
+            const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+            
+            if (hours > 0) {
+              return `${hours} hr ${minutes} min`;
+            } else {
+              return `${minutes} min`;
+            }
         }
     },
     runtimeOptions: {
@@ -169,3 +188,4 @@ app.get('/', (req, res) => {
 //     });
 // })
 
+//console.log(app._router.stack);

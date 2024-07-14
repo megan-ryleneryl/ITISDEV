@@ -4,6 +4,7 @@
 
   {{#if rides.length}}
     {{#each rides}}
+    <a href="/booking/{{rideID}}" onclick="console.log('{{rideID}}')">
       <div class="ride-item">
         <div class="ride-main-info">
           <div class="ride-time">
@@ -28,6 +29,7 @@
           </div>
         </div>
       </div>
+    </a>
     {{/each}}
   {{else}}
     <p class="no-rides">No rides available at the moment.</p>

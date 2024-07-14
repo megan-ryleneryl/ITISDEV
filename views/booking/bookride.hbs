@@ -1,0 +1,125 @@
+<div style="margin-top: 100px;"></div>
+<div class="booking-container">
+  <h1>{{title}}</h1>
+
+  <div class="ride-details">
+    <h2>Ride Details:</h2>
+    <div class="time-details">
+      <p>{{formatTime ride.departureTime.hour ride.departureTime.minute}} {{ride.pickupPoint}}</p>
+      <p>{{formatTime ride.arrivalTime.hour ride.arrivalTime.minute}} {{ride.dropoffPoint}}</p>
+    </div>
+    <p>Total price for 1 passenger: ₱{{ride.price}}</p>
+    <p>Payment method: Cash</p>
+  </div>
+
+  <div class="driver-info">
+    <img src="{{driver.profilePicture}}" alt="Driver profile picture" class="driver-photo">
+    <p>{{driver.name}}</p>
+    <p>{{driver.rating}} ratings</p>
+    <button class="contact-driver">Contact Driver</button>
+  </div>
+
+  <div class="vehicle-info">
+    <h3>Vehicle</h3>
+    <p>{{driver.carMake}} {{driver.carModel}}</p>
+    <p>{{driver.carPlate}}</p>
+  </div>
+
+  <div class="route-map">
+    <h3>Ride Route</h3>
+    <p>Leaving at:{{ride.departureTime}}, Arriving at: {{ride.arrivalTime}}</p>
+    <div class="sample-map">
+      <img src="/img/sample-map.png" alt="Sample route map" style="width: 100%; height: 300px; object-fit: cover;">
+    </div>
+  </div>
+
+  <div class="date-selection">
+    <h3>Which dates do you want to book?</h3>
+    <p>You can book up to 1 month in advance!</p>
+
+    <p>This ride is only available on: {{ride.availableDays}}</p>
+    
+    <div class="calendar">
+      <h4>{{currentMonth}}</h4>
+      <table>
+        {{#each calendarDaysCurrentMonth}}
+          {{#if @first}}<tr>{{/if}}
+          <td class="{{#unless this.isInMonth}}not-in-month{{/unless}}">
+            {{#if this.isInMonth}}
+              {{#if this.isAvailable}}
+                <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
+                <label for="date-{{this.date}}">{{this.day}}</label>
+              {{else}}
+                <span class="unavailable">{{this.day}}</span>
+              {{/if}}
+            {{/if}}
+          </td>
+          {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
+        {{/each}}
+      </table>
+    </div>
+
+    <div class="calendar">
+      <h4>{{nextMonth}}</h4>
+      <table>
+        {{#each calendarDaysNextMonth}}
+          {{#if @first}}<tr>{{/if}}
+          <td class="{{#unless this.isInMonth}}not-in-month{{/unless}}">
+            {{#if this.isInMonth}}
+              {{#if this.isAvailable}}
+                <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
+                <label for="date-{{this.date}}">{{this.day}}</label>
+              {{else}}
+                <span class="unavailable">{{this.day}}</span>
+              {{/if}}
+            {{/if}}
+          </td>
+          {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
+        {{/each}}
+      </table>
+    </div>
+  </div>
+
+  <button id="bookRideBtn" class="book-ride-btn">Book Ride</button>
+</div>
+
+
+<script>
+  // Handle booking
+  document.getElementById('bookRideBtn').addEventListener('click', function() {
+    const selectedDates = Array.from(document.querySelectorAll('input[name="selectedDates"]:checked'))
+      .map(input => input.value);
+
+    if (selectedDates.length === 0) {
+      alert('Please select at least one date to book.');
+      return;
+    }
+
+    // Send booking request to server
+    fetch('/booking/bookRide', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        rideId: '{{ride.rideID}}',
+        dates: selectedDates
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Ride request submitted successfully! Please wait for the driver to accept your booking.');
+        window.location.href = '/myBookings';
+      } else {
+        alert('Ride request failed: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred while requesting the ride.');
+    });
+  });
+</script>
+
+
