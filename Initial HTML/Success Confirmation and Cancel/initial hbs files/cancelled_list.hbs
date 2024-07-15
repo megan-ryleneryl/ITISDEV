@@ -1,0 +1,21 @@
+<div class="canceled-rides-list">
+  <h2>Your Canceled Rides</h2>
+  
+  {{#if canceledRides.length}}
+    <ul>
+      {{#each canceledRides}}
+        <li>
+          <h3>Ride ID: {{rideID}}</h3>
+          <p><strong>Route:</strong> {{route}}</p>
+          <p><strong>Date of Travel:</strong> {{travelDate}}</p>
+          <p><strong>Time of Travel:</strong> {{travelTime}}</p>
+          <p><strong>Cancellation Date:</strong> {{cancellationDate}}</p>
+          <p><strong>Refund Amount:</strong> ₱{{refundAmount}}</p>
+          <p><strong>Status:</strong> {{status}}</p>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>You have not canceled any rides.</p>
+  {{/if}}
+</div>
