@@ -1,48 +1,77 @@
 
 <div class="ride-list-container">
-  <h1>Available Rides</h1>
+  <div class="ride-list">
 
-  {{#if rides.length}}
-    {{#each rides}}
-    <a href="/booking/{{rideID}}" onclick="console.log('{{rideID}}')">
-      <div class="ride-item">
-        <div class="ride-main-info">
-          <div class="ride-time">
-            <span class="departure">{{formatTime departureTime.hour departureTime.minute}}</span>
-            <span class="arrow">→</span>
-            <span class="arrival">{{formatTime arrivalTime.hour arrivalTime.minute}}</span>
-          </div>
-          <div class="ride-route">
-            <span class="pickup">{{pickupPoint}}</span>
-            <span class="arrow">→</span>
-            <span class="dropoff">{{dropoffPoint}}</span>
-          </div>
-        </div>
-        <div class="ride-details">
-          <div class="ride-driver">
-            <span class="driver-name">{{driverName}}</span>
-            <span class="driver-rating">★ 4.5</span>
-          </div>
-          <div class="ride-info">
-            <span class="seats">{{numSeats}} seats available</span>
-            <span class="price">₱{{price}}</span>
-          </div>
-        </div>
+    <h1>Available Rides</h1>
+
+    {{#if rides.length}}
+      {{#each rides}}
+      <a href="/booking/{{rideID}}" onclick="console.log('{{rideID}}')">
+            <div class="ride-info-body">
+                <div class="ride-info-body-container">
+                  <div class="pickupdropoff">
+                    <div class="pickup">
+                      <div class="ride-info-body-time">
+                        <p> {{formatTime departureTime.hour departureTime.minute}}</p>
+                        <img src="/img/route.svg" alt="route">
+                      </div>
+                      <p>{{pickupPoint}}</p>
+                    </div>
+                    <div class="dropoff">
+                      <div class="ride-info-body-time">
+                        <p><strong></strong> {{formatTime arrivalTime.hour arrivalTime.minute}}</p>
+                      </div>
+                      <p>{{dropoffPoint}}</p>
+                    </div>
+                  </div>
+                    <h2><strong></strong> ₱{{price}}</h2>
+                </div>
+
+                <br>
+                <hr width="100%" size="3" color="gray">
+
+                <div class="ride-info-footer">
+                  <div class="ids">
+                    <img src="{{driver.profilePicture}}" alt="Driver profile picture" class="driver-photo">
+                    <p><strong>{{driverName}}</strong></p>
+                    <p><strong>Seats:</strong> {{numSeats}}</p>
+                  </div>
+                  <div class="ridesched">
+                    {{#each (array 'sunday' 'monday' 'tuesday' 'wednesday' 'thursday' 'friday' 'saturday') as |day|}}
+                      <div class="day-container">
+                        <input type="checkbox" id="{{day}}" name="availableDays" value="{{day}}" {{#if (includes day ../availableDays)}}checked{{/if}} disabled>
+                        <label for="{{day}}">
+                          {{#if (eq day 'sunday')}}S{{/if}}
+                          {{#if (eq day 'monday')}}M{{/if}}
+                          {{#if (eq day 'tuesday')}}T{{/if}}
+                          {{#if (eq day 'wednesday')}}W{{/if}}
+                          {{#if (eq day 'thursday')}}H{{/if}}
+                          {{#if (eq day 'friday')}}F{{/if}}
+                          {{#if (eq day 'saturday')}}S{{/if}}
+                        </label>
+                      </div>
+                    {{/each}}
+                  </div>
+                </div>
+              </div>
+      </a>
+      {{/each}}
+    {{else}}
+      <p class="no-rides">No rides available at the moment.</p>
+    {{/if}}
+  </div>
+
+  <div class="ride-destination">
+    <img src="/img/DLSU.jpg" alt="DLSU">
+      <div class="destination-info">
+        <p><strong>De La Salle University</strong></p>
+        <p>2401 Taft Ave, Malate, Manila</p>
       </div>
-    </a>
-    {{/each}}
-  {{else}}
-    <p class="no-rides">No rides available at the moment.</p>
-  {{/if}}
+  </div>
 </div>
-
+{{!-- 
 <style>
-  .ride-list-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    margin-top: 50px;
-  }
+  
   .ride-item {
     background-color: #f8f9fa;
     border-radius: 5px;
@@ -83,4 +112,4 @@
     text-align: center;
     color: #777;
   }
-</style>
+</style> --}}

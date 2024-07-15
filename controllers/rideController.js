@@ -155,6 +155,7 @@ async function viewRides(req, res) {
     res.render('ride/ridelist', { 
       title: 'All Rides',
       rides,
+      css: ['ride.css'],
       user: req.user,
       messages: {
         error: req.flash('error'),
