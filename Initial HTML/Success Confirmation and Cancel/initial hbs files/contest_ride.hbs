@@ -1,17 +1,35 @@
-<div class="contest-ride-container">
-  <h2>Contest a Ride</h2>
-  
-  <form id="contestRideForm" enctype="multipart/form-data">
-    <div class="form-group">
-      <label for="description">Description of Incident:</label>
-      <textarea id="description" name="description" rows="4" placeholder="Describe what happened..." required></textarea>
-    </div>
-    
-    <div class="form-group">
-      <label for="supportingDocuments">Upload Supporting Documents:</label>
-      <input type="file" id="supportingDocuments" name="supportingDocuments" accept=".jpg,.jpeg,.png,.pdf">
-    </div>
-    
-    <button type="submit" class="btn btn-primary">Submit Contest</button>
-  </form>
-</div>
+<h1>Contest a Ride</h1>
+
+{{#if ridesToContest.length}}
+  <ul>
+    {{#each ridesToContest}}
+      <li>
+        <strong>Ride ID:</strong> {{rideID}}<br>
+        <strong>Route:</strong> {{route}}<br>
+        <strong>Date of Travel:</strong> {{travelDate}}<br>
+        <strong>Time of Travel:</strong> {{travelTime}}<br>
+        <button onclick="showContestForm('{{rideID}}')">Contest Ride</button>
+      </li>
+    {{/each}}
+  </ul>
+  <div id="contest-form" style="display:none;">
+    <h2>Submit Contest</h2>
+    <form id="contestForm" enctype="multipart/form-data" method="post" action="/submit-contest">
+      <input type="hidden" name="rideID" id="contestRideID">
+      <label for="description">Description of what transpired:</label><br>
+      <textarea name="description" id="description" required></textarea><br>
+      <label for="supportingDocuments">Upload Supporting Documents:</label><br>
+      <input type="file" name="supportingDocuments" id="supportingDocuments" multiple><br>
+      <button type="submit">Submit Contest</button>
+    </form>
+  </div>
+{{else}}
+  <p>No rides available for contesting.</p>
+{{/if}}
+
+<script>
+function showContestForm(rideID) {
+  document.getElementById('contestRideID').value = rideID;
+  document.getElementById('contest-form').style.display = 'block';
+}
+</script>
