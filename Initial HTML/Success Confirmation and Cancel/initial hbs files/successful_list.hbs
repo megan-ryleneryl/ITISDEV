@@ -1,0 +1,26 @@
+<div class="successful-rides-list">
+  <h2>Your Successful Rides</h2>
+  
+  {{#if successfulRides.length}}
+    <ul>
+      {{#each successfulRides}}
+        <li>
+          <h3>Ride ID: {{rideID}}</h3>
+          <p><strong>Route:</strong> {{route}}</p>
+          <p><strong>Date of Travel:</strong> {{travelDate}}</p>
+          <p><strong>Time of Travel:</strong> {{travelTime}}</p>
+          <p><strong>Pick Up Location:</strong> {{pickupLocation}}</p>
+          <p><strong>Drop Off Location:</strong> {{dropoffLocation}}</p>
+          <p><strong>Pick Up Time:</strong> {{pickupTime}}</p>
+          <p><strong>Drop Off Time:</strong> {{dropoffTime}}</p>
+          <p><strong>Driver:</strong> {{driver}}</p>
+          <p><strong>Price:</strong> ₱{{price}}</p>
+          <button onclick="rateAndReview('{{rideID}}')">Rate and Review</button>
+          <button onclick="contestRide('{{rideID}}')">Contest Ride</button>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p>You have not completed any rides.</p>
+  {{/if}}
+</div>
