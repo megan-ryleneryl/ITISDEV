@@ -47,9 +47,10 @@
           <div class="ids">
             <p><strong>Ride ID:</strong> {{ride.rideID}}</p>
             <p><strong>Driver ID:</strong> {{ride.driverID}}</p>
+            <p><strong>Seats:</strong> {{ride.numSeats}}</p>
           </div>
           <div class="ridesched">
-          <p><strong>Available Days:</strong></p>
+          {{!-- <p><strong>Available Days:</strong></p> --}}
             {{#each (array 'sunday' 'monday' 'tuesday' 'wednesday' 'thursday' 'friday' 'saturday') as |day|}}
               <div class="day-container">
                 <input type="checkbox" id="{{day}}" name="availableDays" value="{{day}}" {{#if (includes day ../ride.availableDays)}}checked{{/if}} disabled>
@@ -66,8 +67,6 @@
             {{/each}}
           </div>
         </div>
-      
-      
       </div>
 
 
@@ -78,9 +77,6 @@
       <p><strong>Additional Pickup Areas:</strong> {{join ride.pickupAreas ", "}}</p>
     {{/if}}
     
-
-
-    <p><strong>Number of Seats:</strong> {{ride.numSeats}}</p>
     
     <p><strong>Status:</strong> {{ride.status}}</p>
 </div>
