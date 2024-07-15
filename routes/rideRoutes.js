@@ -18,6 +18,7 @@ router.get('/driverhome', rideController.getDriverHome);
 router.get('/new', rideController.getNewRideForm);
 router.post('/postRide', rideController.postRide);
 router.get('/viewRides', rideController.viewRides);
+router.post('/search', rideController.searchRides);
 router.get('/:id', rideController.viewRideDetails);
 router.get('/:id/edit', isAuthenticated, rideController.getEditRideForm);
 router.put('/:id', isAuthenticated, rideController.editRide);

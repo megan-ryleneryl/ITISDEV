@@ -5,58 +5,44 @@
 
         <!-- To University Form -->
         <div class="hero-input" id="toUniversityForm">
-            <form class="ride-search-form" action="/ride/viewRides">
-                
-                <select name="pickup" id="pickupTo">
+            <form class="ride-search-form" action="/ride/search" method="POST">
+                <input type="hidden" name="rideType" value="toUniversity">
+                <select name="pickupPoint" id="pickupTo" required>
                     <option value="" disabled selected>From Home</option>
                     {{#each pickupLocations}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </select>
                 <button type="button" class="switch-button" onclick="switchForm()">↔</button>
-                
-                <select name="dropoff" id="dropoffTo">
+                <select name="dropoffPoint" id="dropoffTo" required>
                     <option value="" disabled selected>To University</option>
                     {{#each dropoffLocations}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </select>
-                <input type="text" id="dateTo" placeholder="Today" name="date">
-                <select name="passengers">
-                    <option value="1">1 passenger</option>
-                    <option value="2">2 passengers</option>
-                    <option value="3">3 passengers</option>
-                    <option value="4">4 passengers</option>
-                </select>
+                <input type="text" id="dateTo" placeholder="Today" name="date" required>
                 <button type="submit">Search</button>
             </form>
         </div>
 
         <!-- From University Form -->
         <div class="hero-input" id="fromUniversityForm" style="display: none;">
-            <form class="ride-search-form" action="/ride/viewRides">
-                
-                <select name="pickup" id="pickupFrom">
+            <form class="ride-search-form" action="/ride/search" method="POST">
+                <input type="hidden" name="rideType" value="fromUniversity">
+                <select name="pickupPoint" id="pickupFrom" required>
                     <option value="" disabled selected>From University</option>
                     {{#each dropoffLocations}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </select>
                 <button type="button" class="switch-button" onclick="switchForm()">↔</button>
-                
-                <select name="dropoff" id="dropoffFrom">
+                <select name="dropoffPoint" id="dropoffFrom" required>
                     <option value="" disabled selected>To Home</option>
                     {{#each pickupLocations}}
                     <option value="{{this}}">{{this}}</option>
                     {{/each}}
                 </select>
-                <input type="text" id="dateFrom" placeholder="Today" name="date">
-                <select name="passengers">
-                    <option value="1">1 passenger</option>
-                    <option value="2">2 passengers</option>
-                    <option value="3">3 passengers</option>
-                    <option value="4">4 passengers</option>
-                </select>
+                <input type="text" id="dateFrom" placeholder="Today" name="date" required>
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -104,17 +90,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        flatpickr("#dateTo", {
-            dateFormat: "Y-m-d",
-            defaultDate: "today"
-        });
-        flatpickr("#dateFrom", {
-            dateFormat: "Y-m-d",
-            defaultDate: "today"
-        });
-    });
-
     function switchForm() {
         const toUniversityForm = document.getElementById('toUniversityForm');
         const fromUniversityForm = document.getElementById('fromUniversityForm');
@@ -126,5 +101,39 @@
             toUniversityForm.style.display = 'none';
             fromUniversityForm.style.display = 'block';
         }
+
+        // Reset form fields
+        document.querySelectorAll('.ride-search-form').forEach(form => form.reset());
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        const maxDate = new Date();
+        maxDate.setDate(tomorrow.getDate() + 30);
+
+        flatpickr("#dateTo", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            minDate: tomorrow,
+            maxDate: maxDate,
+            defaultDate: tomorrow,
+            mode: "multiple"
+        });
+        flatpickr("#dateFrom", {
+            dateFormat: "Y-m-d",
+            altInput: true,
+            altFormat: "F j, Y",
+            minDate: tomorrow,
+            maxDate: maxDate,
+            defaultDate: tomorrow,
+            mode: "multiple"
+        });
+    });
+
+    document.getElementById('viewAllButton').addEventListener('click', function() {
+        window.location.href = '/ride/viewRides';
+    });
 </script>

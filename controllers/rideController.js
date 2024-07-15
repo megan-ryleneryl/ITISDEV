@@ -148,6 +148,7 @@ async function viewRides(req, res) {
       const driver = await User.findOne({ userID: ride.driverID });
       if (driver) {
         ride.driverName = driver.name;
+        ride.profilePicture = driver.profilePicture;
       }
     }
 
@@ -168,6 +169,59 @@ async function viewRides(req, res) {
     res.redirect('/');
   }
 }
+
+//View Rides based on Search
+async function searchRides(req, res) {
+  try {
+    const { rideType, pickupPoint, dropoffPoint, date } = req.body;
+
+    // Parse the dates (date is now expected to be an array of dates)
+    const searchDates = date.split(',').map(d => new Date(d.trim()));
+
+    // Create an array of day names corresponding to the search dates
+    const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const searchDays = searchDates.map(searchDate => days[searchDate.getDay()]);
+
+    // Find rides that match any of the search days
+    const rides = await Ride.find({
+      rideType,
+      pickupPoint,
+      dropoffPoint,
+      availableDays: { $in: searchDays },
+      'departureTime.hour': { 
+        $gte: 0, 
+        $lte: 23 
+      },
+      numSeats: { $gte: 1 },
+      status: 'active'
+    }).sort('-createdAt');
+
+    // Populate driver information for each ride
+    for (const ride of rides) {
+      const driver = await User.findOne({ userID: ride.driverID });
+      if (driver) {
+        ride.driverName = driver.name;
+        ride.profilePicture = driver.profilePicture;
+      }
+    }
+
+    res.render('ride/ridelist', {
+      title: 'Search Results',
+      rides,
+      css: ['ride.css'],
+      user: req.user,
+      messages: {
+        error: req.flash('error'),
+        success: req.flash('success')
+      }
+    });
+  } catch (error) {
+    console.error('Error searching rides:', error);
+    req.flash('error', 'Error searching rides');
+    res.redirect('/');
+  }
+}
+
 
 // View a specific ride
 async function viewRideDetails(req, res) {
@@ -314,6 +368,7 @@ module.exports = {
   getNewRideForm,
   postRide,
   viewRides,
+  searchRides,
   viewRideDetails,
   getEditRideForm,
   editRide,
