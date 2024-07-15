@@ -1,0 +1,24 @@
+<main>
+  <div class="chat-header">
+    <a href="/" class="back-button">←</a>
+    <div class="chat-profile">
+      <img src="/public/profile.png" alt="Driver's Profile Picture" class="profile-pic">
+      <div class="chat-details">
+        <span class="chat-name">{{chat.name}}</span>
+        <span class="chat-date">Booking date - {{chat.date}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="chat-messages">
+    {{#each messages}}
+    <div class="message {{this.type}}">
+      <div class="message-sender">{{this.type}}: {{this.name}}</div>
+      <span class="message-details">{{this.details}}</span>
+    </div>
+    {{/each}}
+  </div>
+  <div class="message-input">
+    <input type="text" placeholder="Type a message">
+    <button class="send-button">Send</button>
+  </div>
+</main>

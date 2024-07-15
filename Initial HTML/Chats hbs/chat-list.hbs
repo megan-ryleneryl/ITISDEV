@@ -1,0 +1,15 @@
+<main>
+  <h1>Chat List</h1>
+  <ul class="chat-list">
+    {{#each chats}}
+    <li class="chat-item">
+      <div class="chat-info">
+        <span class="chat-name">{{this.name}}</span>
+        <span class="chat-role">Driver</span>
+        <span class="chat-date">Booking date - {{this.date}}</span>
+      </div>
+      <a href="/chat/{{this.id}}" class="chat-link">></a>
+    </li>
+    {{/each}}
+  </ul>
+</main>
