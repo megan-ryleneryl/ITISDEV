@@ -87,6 +87,12 @@ const hbs = exphbs.create({
             } else {
               return `${minutes} min`;
             }
+        },
+        array: function() {
+            return Array.prototype.slice.call(arguments, 0, -1);
+        },
+        includes: function(item, list) {
+            return list.includes(item);
         }
     },
     runtimeOptions: {

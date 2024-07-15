@@ -182,9 +182,10 @@ async function viewRideDetails(req, res) {
 
 
     res.render('ride/details', { 
-      title: 'Ride Details',
+      title: 'Ride Detail',
       ride,
       bookings,
+      css: ['ride.css'],
       user: req.user,
       messages: {
         error: req.flash('error'),

@@ -124,8 +124,8 @@ input[type="text"], input[type="number"], input[type="email"], input[type="passw
   height: 40px;
   line-height: 40px;
   border-radius: 50%;
-  background-color: #ffffff;
-  color: #000;
+  background-color: var(--quaternary-color);
+  color: var(--quinary-color);
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
@@ -155,4 +155,132 @@ input[type="text"], input[type="number"], input[type="email"], input[type="passw
 .ridepublish:hover{
   background-color: #af3500;
   color: #ffffff;
+}
+
+.ride-details {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 50px;
+  width: 100%;
+}
+.ride-info, .bookings {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  
+}
+
+.ids {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ride-info-body{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: var(--secondary-color);
+  color: var(--quinary-color);
+  padding: 30px;
+  border-radius: 28px;
+
+}
+
+.ride-info-body-time{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+}
+
+.ride-info-body-time p{
+  font-family: "Maven Pro", sans-serif;
+  margin-right: 10px;
+}
+
+.ride-info-body-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.ride-info-body-container h2{
+  font-family: "Maven Pro", sans-serif;
+}
+
+.ride-info-body-container img{
+  width: 100px;
+  height: 20px;
+}
+
+.pickupdropoff {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pickup{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 20px;
+}
+
+.dropoff{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ride-info-footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.bookings h2{
+  margin-bottom: 15px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+.btn {
+  display: inline-block;
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
 }
