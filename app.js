@@ -3,6 +3,8 @@ const express = require('express'); // Import Express, allows you to create a se
 const exphbs = require('express-handlebars'); // Import Express-Handlebars, allows you to create views
 const mongoose = require('mongoose'); // Import Mongoose, allows you to connect to MongoDB
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt'); // For hashing passwords
+const User = require('./models/User'); // Import the User model
 
 /* Connect to MongoDB and then Listen for Requests */
 /**
@@ -186,21 +188,44 @@ app.get('/', (req, res) => {
 });
 
 
-// app.post('/login', 
-//     passport.authenticate('local', {
-//         failureRedirect: '/login',
-//         failureFlash: true
-//     }),
-//     function(req, res) {
-//         // This function is for checking if remember me was clicked
-//         if (req.body.rememberMe) {
-//             req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000; // Cookie expires after 3 weeks
-//         } else {
-//             req.session.cookie.expires = false; // Cookie expires at end of session
-//         }
-//       res.redirect('/index'); 
-//     }
-// );
+app.post('/login', 
+    passport.authenticate('local', {
+        failureRedirect: '/login-failed',
+        failureFlash: true
+    }),
+    function(req, res) {
+        // This function is for checking if remember me was clicked
+        if (req.body.rememberMe) {
+            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000; // Cookie expires after 3 weeks
+        } else {
+            req.session.cookie.expires = false; // Cookie expires at end of session
+        }
+      res.redirect('/index'); 
+    }
+);
+
+
+app.get('/login', (req, res) => {
+    if(req.user){
+        res.redirect('/')
+    }
+    res.render('user/login', {
+        title: "Login",
+        css: ["login.css"],
+        layout: "bodyOnly",
+        messages: req.flash('error')
+    });
+});
+
+app.get('/login-failed', (req, res) => {
+    res.render('user/login', {
+        title: "Login",
+        css: ["login.css"],
+        layout: "bodyOnly",
+        isFailed: true,
+        messages: req.flash('error')
+    });
+});
 
 // app.delete('/logout', (req, res) => {
 //     req.logout((err) => {
@@ -212,6 +237,50 @@ app.get('/', (req, res) => {
 // })
 
 //console.log(app._router.stack);
+
+
+// Route to display registration form
+app.get('/register', (req, res) => {
+    res.render('user/register', {
+        title: "Register",
+        css: ["register.css"],
+        layout: "bodyOnly",
+    });
+});
+
+// Route to handle registration form submission
+app.post('/register', async (req, res) => {
+    try {
+        const { name, email, password, phoneNumber, universityID, profilePicture, driverLicense, carMake, carModel, carPlate } = req.body;
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create a new user object
+        const newUser = new User({
+            name,
+            email,
+            password: hashedPassword,
+            phoneNumber,
+            universityID,
+            profilePicture,
+            driverLicense,
+            carMake,
+            carModel,
+            carPlate,
+            balance: 0,
+            isVerified: false,
+        });
+
+        // Save the user to the database
+        await newUser.save();
+
+        res.redirect('/login'); // Redirect to login page after successful registration
+    } catch (error) {
+        console.error(error);
+        res.redirect('/register');
+    }
+});
 
 
 

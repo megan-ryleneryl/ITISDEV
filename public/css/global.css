@@ -4,7 +4,7 @@
     font-family: 'Raleway', sans-serif;
     box-sizing: border-box;
   }
-  
+
   :root {
     --primary-color: #E64401;
     --secondary-color: #EAEAEA ;
@@ -13,7 +13,7 @@
     --quinary-color: #656565;
     --senary-color: #000000;
   }
-  
+
   body {
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@
     background-color: #fff;
     min-height: 100vh;
   }
-  
+
   li, a, button{
     font-family: 'Raleway', sans-serif;
     font-weight: 700;
@@ -35,11 +35,11 @@
     text-decoration: none;
     color: #000;
   }
-  
+
   ul {
     list-style: none;
   }
-  
+
   nav{
     display: flex;
     flex-direction: row;
@@ -84,6 +84,43 @@ width: 100%;
 
 li{
 padding: 0px 15px;
+}
+
+.user-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  transform: translate(0, 10%);
+  width: 200px;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 1000;
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 16px 24px;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
 }
 
 
