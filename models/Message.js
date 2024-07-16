@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
-  senderID: { type: Number, ref: 'User' }, // Should match a userID (20001 onwards)
-  receiverID: { type: Number, ref: 'User' }, // Should also match a userID 
+  senderID: { type: Number}, // Should match a userID (20001 onwards)
+  receiverID: { type: Number}, // Should also match a userID 
   message: { type: String, required: true },
   date: { type: Date, default: Date.now }
 });

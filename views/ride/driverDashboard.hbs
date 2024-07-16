@@ -1,0 +1,107 @@
+<h1>Driver Dashboard</h1>
+
+<div class="dashboard-container">
+    <div class="accepted-bookings">
+        <h2>Accepted Bookings</h2>
+        {{#if acceptedBookings.length}}
+            <ul class="booking-list">
+                {{#each acceptedBookings}}
+                    <li class="booking-item">
+                        {{#if this.passenger}}
+                            <img src="{{this.passenger.profilePicture}}" alt="Passenger's profile picture" class="passenger-photo">
+                            <div class="booking-details">
+                                <p><strong>Passenger:</strong> {{this.passenger.name}}</p>
+                        {{else}}
+                            <div class="booking-details">
+                                <p><strong>Passenger:</strong> Unknown</p>
+                        {{/if}}
+                        <p><strong>Booking ID:</strong> {{this.bookingID}}</p>
+                        <p><strong>Dates:</strong> {{formatDates this.bookingDates}}</p>
+                        <p><strong>Status:</strong> {{this.rideStatus}}</p>
+                        </div>
+                        {{#if (isActive this.rideStatus)}}
+                            <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>No accepted bookings yet.</p>
+        {{/if}}
+    </div>
+
+    <div class="pending-bookings">
+        <h2>Pending Booking Requests</h2>
+        {{#if pendingBookings.length}}
+            <ul class="booking-list">
+                {{#each pendingBookings}}
+                    <li class="booking-item">
+                        {{#if this.passenger}}
+                            <img src="{{this.passenger.profilePicture}}" alt="Passenger's profile picture" class="passenger-photo">
+                            <div class="booking-details">
+                                <p><strong>Passenger:</strong> {{this.passenger.name}}</p>
+                        {{else}}
+                            <div class="booking-details">
+                                <p><strong>Passenger:</strong> Unknown</p>
+                        {{/if}}
+                        <p><strong>Booking ID:</strong> {{this.bookingID}}</p>
+                        <p><strong>Dates:</strong> {{formatDates this.bookingDates}}</p>
+                        </div>
+                        <div class="booking-actions">
+                            <button class="accept-booking" data-booking-id="{{this.bookingID}}">Accept</button>
+                            <button class="reject-booking" data-booking-id="{{this.bookingID}}">Reject</button>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>No pending booking requests.</p>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+    function handleBookingAction(bookingId, action) {
+        fetch(`/ride/booking/${bookingId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload(); // Reload the page to reflect the changes
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+
+    document.querySelectorAll('.accept-booking').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            handleBookingAction(bookingId, 'accept');
+        });
+    });
+
+    document.querySelectorAll('.reject-booking').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            handleBookingAction(bookingId, 'reject');
+        });
+    });
+
+    // Keep the cancel booking functionality as a placeholder
+    document.querySelectorAll('.cancel-booking').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            alert(`Cancel booking ${bookingId} will be implemented soon.`);
+        });
+    });
+</script>

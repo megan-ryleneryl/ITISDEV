@@ -119,7 +119,46 @@ async function bookRide(req, res) {
 
 async function cancelBooking(req, res) {}
 
-async function viewMyBookings(req, res) {}
+
+async function viewMyBookings(req, res) {
+    try {
+        // Assuming the user is authenticated and their ID is available in req.user.userID
+        // For testing purposes, you can use a hardcoded user ID
+        const userID = req.user ? req.user.userID : 20001; // Replace with actual user ID when authentication is implemented
+
+        // Fetch all bookings for the user
+        const bookings = await Booking.find({ passengerID: userID }).sort('bookingDates');
+
+        // Fetch ride details and driver information for each booking
+        const bookingsWithDetails = await Promise.all(bookings.map(async (booking) => {
+            const ride = await Ride.findOne({ rideID: booking.rideID });
+            let driver = null;
+            if (ride) {
+                driver = await User.findOne({ userID: ride.driverID });
+            }
+            return {
+                ...booking.toObject(),
+                ride: ride ? ride.toObject() : null,
+                driver: driver ? { name: driver.name, profilePicture: driver.profilePicture } : null
+            };
+        }));
+
+        res.render('booking/myBookings', {
+            title: 'My Bookings',
+            bookings: bookingsWithDetails,
+            css: ['booking.css'],
+            user: req.user,
+            messages: {
+                error: req.flash('error'),
+                success: req.flash('success')
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        req.flash('error', 'Error loading bookings');
+        res.redirect('/');
+    }
+}
 
 async function confirmPayment(req, res) {}
 

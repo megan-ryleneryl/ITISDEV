@@ -1,5 +1,5 @@
 <div class="home-wrapper">
-    <section class="hero">
+    <section id="searchRide" class="hero">
         <h1>Built by students for students.</h1>
         <img src="/img/DLSU.jpg" alt="DLSU">
 
@@ -71,7 +71,7 @@
             <div class="details rider">
                 <h2>Searching for a ride?</h2>
                 <p>Looking for a convenient and affordable way to get to campus? Become a student rider with UniRide! Connect with reliable student drivers, save on travel expenses, and enjoy a hassle-free ride to school. Not only will you save money, but you’ll also be contributing to a greener campus by reducing your carbon footprint.</p>
-                <button>Search Rides</button>
+                <button onclick="scrollToSection('searchRide')">Search Rides</button>
             </div>
             <img src="/img/homepage image 1.png" alt="image 1">
         </section>
@@ -136,4 +136,9 @@
     document.getElementById('viewAllButton').addEventListener('click', function() {
         window.location.href = '/ride/viewRides';
     });
+
+    function scrollToSection(id) {
+    const element = document.getElementById(id);
+    element.scrollIntoView({ behavior: 'smooth' });
+}
 </script>

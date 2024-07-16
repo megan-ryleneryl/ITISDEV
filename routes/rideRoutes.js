@@ -13,7 +13,12 @@ const isAuthenticated = (req, res, next) => {
   res.redirect('/login');
 };
 
+//Driver Controls
+
 router.get('/driverhome', rideController.getDriverHome);
+router.get('/dashboard', rideController.driverDashboard);
+router.post('/booking/:id/accept', rideController.acceptBooking);
+router.post('/booking/:id/reject', rideController.rejectBooking);
 
 router.get('/new', rideController.getNewRideForm);
 router.post('/postRide', rideController.postRide);
@@ -23,5 +28,7 @@ router.get('/:id', rideController.viewRideDetails);
 router.get('/:id/edit', isAuthenticated, rideController.getEditRideForm);
 router.put('/:id', isAuthenticated, rideController.editRide);
 router.delete('/:id', isAuthenticated, rideController.deleteRide);
+
+router.get('/', rideController.getDriverHome);
 
 module.exports = router;

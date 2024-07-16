@@ -1,0 +1,45 @@
+{{!-- views/booking/myBookings.hbs --}}
+
+<h1>My Bookings</h1>
+
+{{#if bookings.length}}
+    <div class="bookings-list">
+        {{#each bookings}}
+            <div class="booking-item">
+                <h2>Booking ID: {{this.bookingID}}</h2>
+                {{#if this.ride}}
+                    <p>Ride: {{this.ride.pickupPoint}} to {{this.ride.dropoffPoint}}</p>
+                    {{#if this.driver}}
+                        <p>Driver: {{this.driver.name}}</p>
+                        <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
+                    {{else}}
+                        <p>Driver information not available</p>
+                    {{/if}}
+                    <p>Departure: {{formatTime1 this.ride.departureTime}}</p>
+                    <p>Price: ₱{{this.ride.price}}</p>
+                {{else}}
+                    <p>Ride details not available</p>
+                {{/if}}
+                <p>Booking Dates: {{formatDates this.bookingDates}}</p>
+                <p>Response Status: {{this.responseStatus}}</p>
+                <p>Ride Status: {{this.rideStatus}}</p>
+                <p>Payment Status: {{this.paymentStatus}}</p>
+                {{#if (isActive this.rideStatus)}}
+                    <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
+                {{/if}}
+            </div>
+        {{/each}}
+    </div>
+{{else}}
+    <p>You have no bookings yet.</p>
+{{/if}}
+
+<script>
+    // This is a placeholder for the cancellation functionality
+    document.querySelectorAll('.cancel-booking').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            alert(`Cancellation for booking ${bookingId} will be implemented soon.`);
+        });
+    });
+</script>

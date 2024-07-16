@@ -1,5 +1,5 @@
 {
-  "name": "ccapdev-mco",
+  "name": "itisdev-mvp",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -21,6 +21,7 @@
     "method-override": "^3.0.0",
     "mongoose": "^8.2.0",
     "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0"
   },

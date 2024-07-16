@@ -9,7 +9,6 @@ const RideSchema = new mongoose.Schema({
   },
   driverID: { 
     type: Number, 
-    ref: 'User',
     required: true
   },
   rideType: {

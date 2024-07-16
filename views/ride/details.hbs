@@ -112,6 +112,7 @@
         {{#if (eq user.userID ride.driverID)}}
           <div class="ride-actions">
             <a href="/ride/{{ride.rideID}}/edit" class="btn btn-primary">Edit Ride</a>
+            <a href="/ride/new" class="btn btn-primary">Create Another Ride</a>
             <form action="/ride/{{ride.rideID}}?_method=DELETE" method="POST" style="display: inline;">
               <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this ride?');">Delete Ride</button>
             </form>

@@ -8,8 +8,8 @@ module.exports = router; // Export router so it can be used in app.js
 const bookingController = require('../controllers/bookingController.js');
 
 /* Define Routes */
+router.get('/myBookings', bookingController.viewMyBookings);
 router.get('/:id', bookingController.getBookingForm);
 router.post('/bookRide', bookingController.bookRide);
 router.put('/:id/cancel', bookingController.cancelBooking);
-router.get('/myBookings', bookingController.viewMyBookings);
 router.post('/:id/confirm', bookingController.confirmPayment);

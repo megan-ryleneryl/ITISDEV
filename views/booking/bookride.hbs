@@ -110,7 +110,7 @@
     .then(data => {
       if (data.success) {
         alert('Ride request submitted successfully! Please wait for the driver to accept your booking.');
-        window.location.href = '/myBookings';
+        window.location.href = '/booking/myBookings';
       } else {
         alert('Ride request failed: ' + data.message);
       }

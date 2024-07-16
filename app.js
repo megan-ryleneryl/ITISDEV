@@ -41,6 +41,14 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const contestRoutes = require('./routes/contestRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 
+// Import all models
+require('./models/User');
+require('./models/Ride');
+require('./models/Booking');
+require('./models/University');
+require('./models/City');
+
+
 /* Initialize Express App */
 const app = express();
 
@@ -66,8 +74,14 @@ const hbs = exphbs.create({
         formatTime: function (hour, minute) {
         return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
         },
+        formatTime1: function(timeObj) {
+            return `${timeObj.hour.toString().padStart(2, '0')}:${timeObj.minute.toString().padStart(2, '0')}`;
+        },
         formatDate: function (date) {
         return new Date(date).toLocaleDateString();
+        },
+        formatDates: function(dates) {
+            return dates.map(date => new Date(date).toLocaleDateString()).join(', ');
         },
         formatMonth(date) {
         return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' }).format(date);
@@ -93,6 +107,9 @@ const hbs = exphbs.create({
         },
         includes: function(item, list) {
             return list.includes(item);
+        },
+        isActive: function(status) {
+            return status === 'pending' || status === 'accepted';
         }
     },
     runtimeOptions: {
@@ -195,3 +212,14 @@ app.get('/', (req, res) => {
 // })
 
 //console.log(app._router.stack);
+
+
+
+const cron = require('node-cron');
+const { autoRejectDueBookings } = require('./controllers/rideController');
+
+// Schedule the task to run every hour
+cron.schedule('0 * * * *', () => {
+    console.log('Running auto-reject task');
+    autoRejectDueBookings();
+});

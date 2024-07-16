@@ -65,10 +65,7 @@ async function postRide(req, res) {
       price
     } = req.body;
 
-    // if (!req.isAuthenticated()) {
-    //   req.flash('error', 'You must be logged in to post a ride');
-    //   return res.redirect('/login');
-    // }
+
 
     // const driverID = req.user.userID;
 
@@ -363,6 +360,107 @@ async function deleteRide(req, res) {
   }
 }
 
+async function driverDashboard(req, res) {
+  try {
+      // Assuming the driver is authenticated and their ID is available in req.user.userID
+      // For testing purposes, you can use a hardcoded driver ID
+      const driverID = req.user ? req.user.userID : 20001; // Replace with actual driver ID when authentication is implemented
+
+      // Fetch all rides for this driver
+      const rides = await Ride.find({ driverID: driverID });
+
+      // Fetch all bookings for these rides
+      const bookings = await Booking.find({ 
+          rideID: { $in: rides.map(ride => ride.rideID) }
+      });
+
+      // Fetch passenger details for each booking
+      const bookingsWithPassengerDetails = await Promise.all(bookings.map(async (booking) => {
+          const passenger = await User.findOne({ userID: booking.passengerID });
+          return {
+              ...booking.toObject(),
+              passenger: passenger ? {
+                  name: passenger.name,
+                  profilePicture: passenger.profilePicture
+              } : null
+          };
+      }));
+
+      // Separate accepted and pending bookings
+      const acceptedBookings = bookingsWithPassengerDetails.filter(booking => booking.responseStatus === 'accepted');
+      const pendingBookings = bookingsWithPassengerDetails.filter(booking => booking.responseStatus === 'pending');
+
+      res.render('ride/driverDashboard', {
+          title: 'Driver Dashboard',
+          acceptedBookings,
+          pendingBookings,
+          css: ['driverDashboard.css'],
+          user: req.user,
+          messages: {
+              error: req.flash('error'),
+              success: req.flash('success')
+          }
+      });
+  } catch (error) {
+      console.error('Error loading driver dashboard:', error);
+      req.flash('error', 'Error loading dashboard');
+      res.redirect('/');
+  }
+}
+
+async function acceptBooking(req, res) {
+  try {
+      const bookingId = parseInt(req.params.id);
+      const booking = await Booking.findOne({ bookingID: bookingId });
+
+      if (!booking) {
+          return res.status(404).json({ success: false, message: 'Booking not found' });
+      }
+
+      booking.responseStatus = 'accepted';
+      await booking.save();
+
+      res.json({ success: true, message: 'Booking accepted successfully' });
+  } catch (error) {
+      console.error('Error accepting booking:', error);
+      res.status(500).json({ success: false, message: 'Error accepting booking' });
+  }
+}
+
+async function rejectBooking(req, res) {
+  try {
+      const bookingId = parseInt(req.params.id);
+      const booking = await Booking.findOne({ bookingID: bookingId });
+
+      if (!booking) {
+          return res.status(404).json({ success: false, message: 'Booking not found' });
+      }
+
+      booking.responseStatus = 'rejected';
+      await booking.save();
+
+      res.json({ success: true, message: 'Booking rejected successfully' });
+  } catch (error) {
+      console.error('Error rejecting booking:', error);
+      res.status(500).json({ success: false, message: 'Error rejecting booking' });
+  }
+}
+
+async function autoRejectDueBookings() {
+  const currentDate = new Date();
+  const dueBookings = await Booking.find({
+      responseStatus: 'pending',
+      bookingDates: { $lt: currentDate }
+  });
+
+  for (const booking of dueBookings) {
+      booking.responseStatus = 'rejected';
+      await booking.save();
+  }
+
+  console.log(`Auto-rejected ${dueBookings.length} due bookings`);
+}
+
 module.exports = {
   getDriverHome,
   getNewRideForm,
@@ -372,5 +470,9 @@ module.exports = {
   viewRideDetails,
   getEditRideForm,
   editRide,
-  deleteRide
+  deleteRide,
+  driverDashboard,
+  acceptBooking,
+  rejectBooking,
+  autoRejectDueBookings
 };
