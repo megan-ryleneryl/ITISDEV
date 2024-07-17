@@ -286,9 +286,16 @@ app.post('/register', async (req, res) => {
 
 const cron = require('node-cron');
 const { autoRejectDueBookings } = require('./controllers/rideController');
+const { autoCompleteRides } = require('./controllers/rideController');
 
 // Schedule the task to run every hour
 cron.schedule('0 * * * *', () => {
     console.log('Running auto-reject task');
     autoRejectDueBookings();
+});
+
+// Schedule the task to run every 15 minutes
+cron.schedule('*/15 * * * *', () => {
+    console.log('Running auto-complete rides task');
+    autoCompleteRides();
 });

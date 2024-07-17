@@ -35,11 +35,37 @@
 {{/if}}
 
 <script>
-    // This is a placeholder for the cancellation functionality
+    function handleCancellation(bookingId) {
+        fetch(`/ride/booking/${bookingId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.warning) {
+                    alert(data.warning);
+                }
+                alert(data.message);
+                location.reload(); // Reload the page to reflect the changes
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+
     document.querySelectorAll('.cancel-booking').forEach(button => {
         button.addEventListener('click', function() {
             const bookingId = this.getAttribute('data-booking-id');
-            alert(`Cancellation for booking ${bookingId} will be implemented soon.`);
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                handleCancellation(bookingId);
+            }
         });
     });
 </script>

@@ -461,6 +461,88 @@ async function autoRejectDueBookings() {
   console.log(`Auto-rejected ${dueBookings.length} due bookings`);
 }
 
+async function cancelBooking(req, res) {
+  try {
+      const bookingId = parseInt(req.params.id);
+      const booking = await Booking.findOne({ bookingID: bookingId });
+
+      if (!booking) {
+          return res.status(404).json({ success: false, message: 'Booking not found' });
+      }
+
+      // Fetch the associated ride to get the departure time
+      const ride = await Ride.findOne({ rideID: booking.rideID });
+      if (!ride) {
+          return res.status(404).json({ success: false, message: 'Associated ride not found' });
+      }
+
+      // Calculate the time difference
+      const now = new Date();
+      
+      // Find the next occurrence of the ride based on booking dates
+      const nextRideDate = booking.bookingDates.find(date => date > now);
+      
+      if (!nextRideDate) {
+          return res.status(400).json({ success: false, message: 'No future rides found for this booking' });
+      }
+
+      // Set the departure time on the next ride date
+      const departureTime = new Date(nextRideDate);
+      departureTime.setHours(ride.departureTime.hour, ride.departureTime.minute, 0, 0);
+
+      const timeDifference = (departureTime - now) / (1000 * 60 * 60); // difference in hours
+
+      let message = 'Booking cancelled successfully';
+      let warning = '';
+
+      if (timeDifference <= 3) {
+          warning = 'Warning: Cancelling within 3 hours of departure. Penalties may be applied in the future.';
+      }
+
+      booking.rideStatus = 'cancelled';
+      await booking.save();
+
+      res.json({ success: true, message, warning });
+  } catch (error) {
+      console.error('Error cancelling booking:', error);
+      res.status(500).json({ success: false, message: 'Error cancelling booking' });
+  }
+}
+
+async function autoCompleteRides() {
+  try {
+      const now = new Date();
+      const threeHoursAgo = new Date(now.getTime() - (3 * 60 * 60 * 1000));
+
+      // Find all active rides that departed more than 3 hours ago
+      const rides = await Ride.find({
+          status: 'active',
+          $expr: {
+              $and: [
+                  { $lt: [{ $dateFromParts: { 'year': { $year: '$date' }, 'month': { $month: '$date' }, 'day': { $dayOfMonth: '$date' }, 'hour': '$departureTime.hour', 'minute': '$departureTime.minute' } }, threeHoursAgo] },
+                  { $lt: ['$date', now] }
+              ]
+          }
+      });
+
+      for (const ride of rides) {
+          // Update ride status
+          ride.status = 'completed';
+          await ride.save();
+
+          // Update associated bookings
+          await Booking.updateMany(
+              { rideID: ride.rideID, rideStatus: 'pending' },
+              { $set: { rideStatus: 'completed' } }
+          );
+      }
+
+      console.log(`Auto-completed ${rides.length} rides`);
+  } catch (error) {
+      console.error('Error in autoCompleteRides:', error);
+  }
+}
+
 module.exports = {
   getDriverHome,
   getNewRideForm,
@@ -474,5 +556,7 @@ module.exports = {
   driverDashboard,
   acceptBooking,
   rejectBooking,
-  autoRejectDueBookings
+  autoRejectDueBookings,
+  cancelBooking,
+  autoCompleteRides
 };

@@ -19,6 +19,7 @@ router.get('/driverhome', rideController.getDriverHome);
 router.get('/dashboard', rideController.driverDashboard);
 router.post('/booking/:id/accept', rideController.acceptBooking);
 router.post('/booking/:id/reject', rideController.rejectBooking);
+router.post('/booking/:id/cancel', rideController.cancelBooking);
 
 router.get('/new', rideController.getNewRideForm);
 router.post('/postRide', rideController.postRide);

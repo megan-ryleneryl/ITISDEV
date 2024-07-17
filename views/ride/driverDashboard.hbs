@@ -71,6 +71,9 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                if (data.warning) {
+                    alert(data.warning);
+                }
                 alert(data.message);
                 location.reload(); // Reload the page to reflect the changes
             } else {
@@ -97,11 +100,12 @@
         });
     });
 
-    // Keep the cancel booking functionality as a placeholder
     document.querySelectorAll('.cancel-booking').forEach(button => {
         button.addEventListener('click', function() {
             const bookingId = this.getAttribute('data-booking-id');
-            alert(`Cancel booking ${bookingId} will be implemented soon.`);
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                handleBookingAction(bookingId, 'cancel');
+            }
         });
     });
 </script>
