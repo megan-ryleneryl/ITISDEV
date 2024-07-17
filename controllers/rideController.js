@@ -510,37 +510,7 @@ async function cancelBooking(req, res) {
 }
 
 async function autoCompleteRides() {
-  try {
-      const now = new Date();
-      const threeHoursAgo = new Date(now.getTime() - (3 * 60 * 60 * 1000));
 
-      // Find all active rides that departed more than 3 hours ago
-      const rides = await Ride.find({
-          status: 'active',
-          $expr: {
-              $and: [
-                  { $lt: [{ $dateFromParts: { 'year': { $year: '$date' }, 'month': { $month: '$date' }, 'day': { $dayOfMonth: '$date' }, 'hour': '$departureTime.hour', 'minute': '$departureTime.minute' } }, threeHoursAgo] },
-                  { $lt: ['$date', now] }
-              ]
-          }
-      });
-
-      for (const ride of rides) {
-          // Update ride status
-          ride.status = 'completed';
-          await ride.save();
-
-          // Update associated bookings
-          await Booking.updateMany(
-              { rideID: ride.rideID, rideStatus: 'pending' },
-              { $set: { rideStatus: 'completed' } }
-          );
-      }
-
-      console.log(`Auto-completed ${rides.length} rides`);
-  } catch (error) {
-      console.error('Error in autoCompleteRides:', error);
-  }
 }
 
 module.exports = {

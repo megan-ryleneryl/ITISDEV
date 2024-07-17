@@ -295,7 +295,7 @@ cron.schedule('0 * * * *', () => {
 });
 
 // Schedule the task to run every 15 minutes
-cron.schedule('*/15 * * * *', () => {
-    console.log('Running auto-complete rides task');
-    autoCompleteRides();
-});
+// cron.schedule('*/15 * * * *', () => {
+//     console.log('Running auto-complete rides task');
+//     autoCompleteRides();
+// });
