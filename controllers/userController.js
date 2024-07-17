@@ -32,6 +32,7 @@ async function getProfilePage(req, res) {
     // }
 }
 
+
 module.exports = {
     viewProfile,
     editProfile,
