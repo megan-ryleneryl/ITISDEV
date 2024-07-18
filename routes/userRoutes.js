@@ -8,7 +8,6 @@ module.exports = router;
 const userController = require('../controllers/userController.js');
 
 router.get('/profile', userController.viewProfile);
-router.post('/login', userController.login);
 router.put('/profile', userController.editProfile);
 router.delete('/profile', userController.deleteProfile);
 router.post('/withdraw', userController.withdrawBalance);

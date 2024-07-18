@@ -19,7 +19,7 @@
                         <p><strong>Dates:</strong> {{formatDates this.bookingDates}}</p>
                         <p><strong>Status:</strong> {{this.rideStatus}}</p>
                         </div>
-                        {{#if (isActive this.rideStatus)}}
+                        {{#if (isActive this.rideStatus this.responseStatus)}}
                             <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
                         {{/if}}
                     </li>
@@ -62,7 +62,7 @@
 
 <script>
     function handleBookingAction(bookingId, action) {
-        fetch(`/ride/booking/${bookingId}/${action}`, {
+        fetch(`/booking/${bookingId}/${action}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -8,7 +8,7 @@
             <div class="booking-item">
                 <h2>Booking ID: {{this.bookingID}}</h2>
                 {{#if this.ride}}
-                    <p>Ride: {{this.ride.pickupPoint}} to {{this.ride.dropoffPoint}}</p>
+                    <p>Ride: {{this.ride.pickupPoint}} to {{this.ride.dropoffPoint}} , RideID: {{this.ride.rideID}}</p>
                     {{#if this.driver}}
                         <p>Driver: {{this.driver.name}}</p>
                         <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
@@ -20,11 +20,11 @@
                 {{else}}
                     <p>Ride details not available</p>
                 {{/if}}
-                <p>Booking Dates: {{formatDates this.bookingDates}}</p>
+                <p>Booking Dates: {{formatDate this.bookingDate}}</p>
                 <p>Response Status: {{this.responseStatus}}</p>
                 <p>Ride Status: {{this.rideStatus}}</p>
                 <p>Payment Status: {{this.paymentStatus}}</p>
-                {{#if (isActive this.rideStatus)}}
+                {{#if (isActive this.rideStatus this.responseStatus)}}
                     <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
                 {{/if}}
             </div>
@@ -36,7 +36,7 @@
 
 <script>
     function handleCancellation(bookingId) {
-        fetch(`/ride/booking/${bookingId}/cancel`, {
+        fetch(`/booking/${bookingId}/cancel`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

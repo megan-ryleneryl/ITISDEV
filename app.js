@@ -83,7 +83,7 @@ const hbs = exphbs.create({
         return new Date(date).toLocaleDateString();
         },
         formatDates: function(dates) {
-            return dates.map(date => new Date(date).toLocaleDateString()).join(', ');
+            return Array.isArray(dates) ? dates.map(date => new Date(date).toLocaleDateString()).join(', ') : '';
         },
         formatMonth(date) {
         return new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' }).format(date);
@@ -110,8 +110,12 @@ const hbs = exphbs.create({
         includes: function(item, list) {
             return list.includes(item);
         },
-        isActive: function(status) {
-            return status === 'pending' || status === 'accepted';
+        isActive: function(rideStatus, responseStatus) {
+            if (rideStatus === 'completed' || responseStatus === 'rejected' || rideStatus === 'cancelled') {
+                return false;
+            } else {
+                return true;
+            }
         }
     },
     runtimeOptions: {
@@ -285,17 +289,25 @@ app.post('/register', async (req, res) => {
 
 
 const cron = require('node-cron');
-const { autoRejectDueBookings } = require('./controllers/rideController');
-const { autoCompleteRides } = require('./controllers/rideController');
+const { autoRejectDueBookings } = require('./controllers/bookingController');
+const { autoCompleteBookings } = require('./controllers/bookingController');
 
-// Schedule the task to run every hour
-cron.schedule('0 * * * *', () => {
+// // Schedule the task to run every hour
+// cron.schedule('0 * * * *', () => {
+//     console.log('Running auto-reject task');
+//     autoRejectDueBookings();
+// });
+
+// //Schedule the task to run every 15 minutes
+// cron.schedule('*/15 * * * *', () => {
+//     console.log('Running auto-complete bookings task');
+//     autoCompleteBookings();
+// });
+
+// Scheduled Task Tester (run both tasks per minute)
+cron.schedule('* * * * *', () => {
     console.log('Running auto-reject task');
     autoRejectDueBookings();
+    console.log('Running auto-complete bookings task');
+    autoCompleteBookings();
 });
-
-// Schedule the task to run every 15 minutes
-// cron.schedule('*/15 * * * *', () => {
-//     console.log('Running auto-complete rides task');
-//     autoCompleteRides();
-// });
