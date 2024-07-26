@@ -90,6 +90,8 @@
     const selectedDates = Array.from(document.querySelectorAll('input[name="selectedDates"]:checked'))
       .map(input => input.value);
 
+  
+
     if (selectedDates.length === 0) {
       alert('Please select at least one date to book.');
       return;

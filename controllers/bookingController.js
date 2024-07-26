@@ -29,11 +29,14 @@ async function getBookingForm(req, res) {
     }
 
     const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     const availableDays = ride.availableDays.map(day => day.toLowerCase()); // Convert days to lowercase 
     const weekDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']; // Array of week days
     
-    // Find the closest available day from today
-    let closestAvailableDay = new Date(today); // Start from today
+    // Find the closest available day from tomorrow
+    let closestAvailableDay = new Date(today);
     while (!availableDays.includes(weekDays[closestAvailableDay.getDay()])) { // Check if the day is available for booking
         closestAvailableDay.setDate(closestAvailableDay.getDate() + 1); // Move to the next day
     }
@@ -49,7 +52,7 @@ async function getBookingForm(req, res) {
             date: day.toISOString().split('T')[0],
             day: day.getDate(),
             isInMonth: day.getMonth() === closestAvailableDay.getMonth() || day.getMonth() === closestAvailableDay.getMonth() + 1,
-            isAvailable: availableDays.includes(weekDays[day.getDay()]) && day >= today
+            isAvailable: availableDays.includes(weekDays[day.getDay()]) && day >= tomorrow
         };
         
         if (day.getMonth() === today.getMonth()) {
