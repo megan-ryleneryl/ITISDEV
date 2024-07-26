@@ -1,0 +1,9 @@
+.booking-item a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.booking-item:hover {
+  background-color: #f0f0f0;
+}

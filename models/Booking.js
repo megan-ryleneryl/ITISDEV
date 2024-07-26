@@ -6,7 +6,7 @@ const BookingSchema = new mongoose.Schema({
   passengerID: { type: Number}, // Should match with a userID (20001 onwards)
   bookingDate: { type: Date, required: true },
   responseStatus: { type: String, enum: ['pending', 'accepted', 'rejected'], default: 'pending' },
-  rideStatus: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'pending' },
+  rideStatus: { type: String, enum: ['pending','ongoing', 'completed', 'cancelled'], default: 'pending' },
   paymentStatus: { type: String, enum: ['pending', 'paid', 'refunded'], default: 'pending' } 
 });
 

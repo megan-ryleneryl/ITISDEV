@@ -1,0 +1,104 @@
+<div style="margin-top: 100px;"></div>
+<h1>Booking Details</h1>
+
+<div class="booking-details">
+    <h2>Booking ID: {{booking.bookingID}}</h2>
+    
+    <h3>Ride Information</h3>
+    {{#if ride}}
+        <p>From: {{ride.pickupPoint}}</p>
+        <p>To: {{ride.dropoffPoint}}</p>
+        <p>Departure Time: {{formatTime1 ride.departureTime}}</p>
+        <p>Price: ₱{{ride.price}}</p>
+    {{else}}
+        <p>Ride information not available</p>
+    {{/if}}
+
+    <h3>Booking Information</h3>
+    <p>Booking Date: {{formatDate booking.bookingDate}}</p>
+    <p>Response Status: {{booking.responseStatus}}</p>
+    <p>Ride Status: {{#if (eq booking.rideStatus 'ongoing')}}On the Way{{else}}{{booking.rideStatus}}{{/if}}</p>
+    <p>Payment Status: {{booking.paymentStatus}}</p>
+
+    <h3>Passenger Information</h3>
+    {{#if passenger}}
+        <img src="{{passenger.profilePicture}}" alt="Passenger's profile picture" class="profile-photo">
+        <p>Name: {{passenger.name}}</p>
+    {{else}}
+        <p>Passenger information not available</p>
+    {{/if}}
+
+    <h3>Driver Information</h3>
+    {{#if driver}}
+        <img src="{{driver.profilePicture}}" alt="Driver's profile picture" class="profile-photo">
+        <p>Name: {{driver.name}}</p>
+    {{else}}
+        <p>Driver information not available</p>
+    {{/if}}
+</div>
+
+{{#if (isActive booking.rideStatus booking.responseStatus)}}
+    <button class="cancel-booking" data-booking-id="{{booking.bookingID}}">Cancel Booking</button>
+{{/if}}
+
+{{#if (not (eq user.userID booking.passengerID))}}
+    <button class="message-passenger" data-passenger-id="{{booking.passengerID}}">Message Passenger</button>
+{{else}}
+    <button class="message-driver" data-driver-id="{{ride.driverID}}">Message Driver</button>
+{{/if}}
+
+<script>
+    document.querySelectorAll('.message-driver').forEach(button => {
+        button.addEventListener('click', function() {
+            const driverId = this.getAttribute('data-driver-id');
+            // logic to open a chat with the driver
+            // This could be opening a chat modal or redirecting to a chat page
+            // TO BE IMPLEMENTED IN THE FUTURE
+            console.log('Open chat with driver:', driverId);
+            // Example: window.location.href = `/chat/${driverId}`;
+        });
+    });
+
+    document.querySelectorAll('.message-passenger').forEach(button => {
+        button.addEventListener('click', function() {
+            const passengerId = this.getAttribute('data-passenger-id');
+            // logic to open a chat with the passenger
+            // This could be opening a chat modal or redirecting to a chat page
+            // TO BE IMPLEMENTED IN THE FUTURE
+            console.log('Open chat with passenger:', passengerId);
+            // Example: window.location.href = `/chat/${passengerId}`;
+        });
+    });
+
+    document.querySelectorAll('.cancel-booking').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            if (confirm('Are you sure you want to cancel this booking?')) {
+                handleBookingAction(bookingId, 'cancel');
+            }
+        });
+    });
+
+    function handleBookingAction(bookingId, action) {
+        fetch(`/booking/${bookingId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+
+</script>

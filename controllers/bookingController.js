@@ -29,16 +29,16 @@ async function getBookingForm(req, res) {
     }
 
     const today = new Date();
-    const availableDays = ride.availableDays.map(day => day.toLowerCase());
-    const weekDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const availableDays = ride.availableDays.map(day => day.toLowerCase()); // Convert days to lowercase 
+    const weekDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']; // Array of week days
     
     // Find the closest available day from today
-    let closestAvailableDay = new Date(today);
-    while (!availableDays.includes(weekDays[closestAvailableDay.getDay()])) {
-        closestAvailableDay.setDate(closestAvailableDay.getDate() + 1);
+    let closestAvailableDay = new Date(today); // Start from today
+    while (!availableDays.includes(weekDays[closestAvailableDay.getDay()])) { // Check if the day is available for booking
+        closestAvailableDay.setDate(closestAvailableDay.getDate() + 1); // Move to the next day
     }
 
-    const calendarDaysCurrentMonth = [];
+    const calendarDaysCurrentMonth = []; // Array to store days of the current month
     const calendarDaysNextMonth = [];
     const startDay = new Date(closestAvailableDay);
     startDay.setDate(startDay.getDate() - startDay.getDay()); // Start from the first day of the week
@@ -123,19 +123,52 @@ async function bookRide(req, res) {
   }
   
 
-async function cancelBooking(req, res) {}
+  async function viewBookingDetails(req, res) {
+    try {
+        const bookingId = parseInt(req.params.id);
+        const booking = await Booking.findOne({ bookingID: bookingId });
+
+        if (!booking) {
+            req.flash('error', 'Booking not found');
+            return res.redirect('/');
+        }
+
+        const ride = await Ride.findOne({ rideID: booking.rideID });
+        const passenger = await User.findOne({ userID: booking.passengerID });
+        const driver = await User.findOne({ userID: ride.driverID });
+
+        res.render('booking/details', {
+            title: 'Booking Details',
+            booking: booking.toObject(),
+            ride: ride ? ride.toObject() : null,
+            passenger: passenger ? {
+                name: passenger.name,
+                profilePicture: passenger.profilePicture
+            } : null,
+            driver: driver ? {
+                name: driver.name,
+                profilePicture: driver.profilePicture
+            } : null,
+            css: ['booking.css'],
+            user: req.user,
+            messages: {
+                error: req.flash('error'),
+                success: req.flash('success')
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching booking details:', error);
+        req.flash('error', 'Error loading booking details');
+        res.redirect('/');
+    }
+}
 
 
 async function viewMyBookings(req, res) {
     try {
-        // Assuming the user is authenticated and their ID is available in req.user.userID
-        // For testing purposes, you can use a hardcoded user ID
-        const userID = req.user ? req.user.userID : 20001; // Replace with actual user ID when authentication is implemented
-
-        // Fetch all bookings for the user
+        const userID = req.user ? req.user.userID : 20001;
         const bookings = await Booking.find({ passengerID: userID }).sort('bookingDate');
 
-        // Fetch ride details and driver information for each booking
         const bookingsWithDetails = await Promise.all(bookings.map(async (booking) => {
             const ride = await Ride.findOne({ rideID: booking.rideID });
             let driver = null;
@@ -149,9 +182,24 @@ async function viewMyBookings(req, res) {
             };
         }));
 
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const todayBookings = bookingsWithDetails.filter(booking => 
+            booking.bookingDate.setHours(0, 0, 0, 0) === today.getTime() &&
+            ['pending', 'ongoing'].includes(booking.rideStatus) &&
+            !['rejected', 'cancelled'].includes(booking.responseStatus, booking.rideStatus)
+        );
+
+        const otherActiveBookings = bookingsWithDetails.filter(booking => 
+            (booking.bookingDate.setHours(0, 0, 0, 0) > today.getTime() || // Check if booking date is after today 
+            (booking.bookingDate.setHours(0, 0, 0, 0) === today.getTime() && booking.rideStatus === 'pending'))
+        );
+
         res.render('booking/myBookings', {
             title: 'My Bookings',
-            bookings: bookingsWithDetails,
+            todayBookings,
+            otherActiveBookings,
             css: ['booking.css'],
             user: req.user,
             messages: {
@@ -170,36 +218,50 @@ async function confirmPayment(req, res) {}
 
 async function driverDashboard(req, res) {
     try {
-        // Assuming the driver is authenticated and their ID is available in req.user.userID
-        // For testing purposes, you can use a hardcoded driver ID
-        const driverID = req.user ? req.user.userID : 20001; // Replace with actual driver ID when authentication is implemented
-  
-        // Fetch all rides for this driver
+        const driverID = req.user ? req.user.userID : 20001;
         const rides = await Ride.find({ driverID: driverID });
-  
-        // Fetch all bookings for these rides
         const bookings = await Booking.find({ 
             rideID: { $in: rides.map(ride => ride.rideID) }
         });
-  
-        // Fetch passenger details for each booking
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const bookingsWithPassengerDetails = await Promise.all(bookings.map(async (booking) => {
             const passenger = await User.findOne({ userID: booking.passengerID });
+            const ride = await Ride.findOne({ rideID: booking.rideID });
             return {
                 ...booking.toObject(),
                 passenger: passenger ? {
                     name: passenger.name,
                     profilePicture: passenger.profilePicture
-                } : null
+                } : null,
+                ride: ride ? ride.toObject() : null
             };
         }));
-  
-        // Separate accepted and pending bookings
-        const acceptedBookings = bookingsWithPassengerDetails.filter(booking => booking.responseStatus === 'accepted');
-        const pendingBookings = bookingsWithPassengerDetails.filter(booking => booking.responseStatus === 'pending' && booking.rideStatus === 'pending');
-  
+
+        console.log(bookingsWithPassengerDetails);
+
+        const todayBookings = bookingsWithPassengerDetails.filter(booking => 
+            booking.bookingDate.setHours(0, 0, 0, 0) === today.getTime() &&
+            booking.responseStatus === 'accepted' &&
+            ['pending', 'ongoing'].includes(booking.rideStatus)
+        );
+
+        const acceptedBookings = bookingsWithPassengerDetails.filter(booking => 
+            booking.responseStatus === 'accepted' &&
+            booking.rideStatus === 'pending' &&
+            booking.bookingDate.setHours(0, 0, 0, 0) > today.getTime()
+        );
+
+        const pendingBookings = bookingsWithPassengerDetails.filter(booking => 
+            booking.responseStatus === 'pending' && 
+            booking.rideStatus === 'pending'
+        );
+
         res.render('ride/driverDashboard', {
             title: 'Driver Dashboard',
+            todayBookings,
             acceptedBookings,
             pendingBookings,
             css: ['driverDashboard.css'],
@@ -214,8 +276,9 @@ async function driverDashboard(req, res) {
         req.flash('error', 'Error loading dashboard');
         res.redirect('/');
     }
-  }
-  
+}
+
+
   async function acceptBooking(req, res) {
     try {
         const bookingId = parseInt(req.params.id);
@@ -270,6 +333,71 @@ async function driverDashboard(req, res) {
   
     console.log(`Auto-rejected ${dueBookings.length} due bookings`);
   }
+
+  async function startBooking(req, res) {
+    try {
+        const bookingId = parseInt(req.params.id);
+        const booking = await Booking.findOne({ bookingID: bookingId });
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found' });
+        }
+
+        // Fetch the associated ride
+        const ride = await Ride.findOne({ rideID: booking.rideID });
+        if (!ride) {
+            return res.status(404).json({ success: false, message: 'Associated ride not found' });
+        }
+
+        // Get the current date
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Count the number of "On the Way" bookings for this ride today
+        const ongoingBookingsCount = await Booking.countDocuments({
+            rideID: booking.rideID,
+            rideStatus: 'ongoing',
+            bookingDate: today
+        });
+
+        // Check if the number of ongoing bookings is less than the number of seats
+        if (ongoingBookingsCount >= ride.numSeats) {
+            return res.status(400).json({ 
+                success: false, 
+                message: `Cannot start more rides. Maximum capacity of ${ride.numSeats} seats reached.`
+            });
+        }
+
+        booking.rideStatus = 'ongoing';
+        await booking.save();
+
+        res.json({ success: true, message: 'Booking started successfully' });
+    } catch (error) {
+        console.error('Error starting booking:', error);
+        res.status(500).json({ success: false, message: 'Error starting booking' });
+    }
+}
+
+  async function completeBooking(req, res) {
+    try {
+        const bookingId = parseInt(req.params.id);
+        const booking = await Booking.findOne({ bookingID: bookingId });
+  
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found' });
+        }
+  
+        booking.rideStatus = 'completed';
+        await booking.save();
+  
+        res.json({ success: true, message: 'Booking completed successfully' });
+    } catch (error) {
+        console.error('Error completing booking:', error);
+        res.status(500).json({ success: false, message: 'Error completing booking' });
+    }
+  }
+
+  
   
   async function cancelBooking(req, res) {
     try {
@@ -348,13 +476,15 @@ async function driverDashboard(req, res) {
 module.exports = {
     getBookingForm,
     bookRide,
-    cancelBooking,
+    viewBookingDetails,
     viewMyBookings,
     confirmPayment,
     driverDashboard,
     acceptBooking,
     rejectBooking,
     autoRejectDueBookings,
+    startBooking,
+    completeBooking,
     cancelBooking,
     autoCompleteBookings
 }

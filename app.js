@@ -116,6 +116,12 @@ const hbs = exphbs.create({
             } else {
                 return true;
             }
+        },
+        gte: function(a, b) {
+            return a >= b;
+        },
+        not: function (a){
+            return !a
         }
     },
     runtimeOptions: {
@@ -290,7 +296,6 @@ app.post('/register', async (req, res) => {
 
 const cron = require('node-cron');
 const { autoRejectDueBookings } = require('./controllers/bookingController');
-const { autoCompleteBookings } = require('./controllers/bookingController');
 
 // // Schedule the task to run every hour
 // cron.schedule('0 * * * *', () => {
@@ -298,16 +303,8 @@ const { autoCompleteBookings } = require('./controllers/bookingController');
 //     autoRejectDueBookings();
 // });
 
-// //Schedule the task to run every 15 minutes
-// cron.schedule('*/15 * * * *', () => {
-//     console.log('Running auto-complete bookings task');
-//     autoCompleteBookings();
-// });
-
-// Scheduled Task Tester (run both tasks per minute)
+// Scheduled Task Tester (run tasks per minute)
 cron.schedule('* * * * *', () => {
     console.log('Running auto-reject task');
     autoRejectDueBookings();
-    console.log('Running auto-complete bookings task');
-    autoCompleteBookings();
 });

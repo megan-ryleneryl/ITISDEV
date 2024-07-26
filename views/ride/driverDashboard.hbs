@@ -1,12 +1,51 @@
+<div style="margin-top: 100px;"></div>
 <h1>Driver Dashboard</h1>
 
 <div class="dashboard-container">
+    <div class="today-bookings">
+        <h2>Bookings Scheduled Today</h2>
+        {{#if todayBookings.length}}
+            <ul class="booking-list">
+                {{#each todayBookings}}
+                    <li class="booking-item">
+                        <a href="/booking/bookingDetails/{{this.bookingID}}">
+                            {{#if this.passenger}}
+                                <img src="{{this.passenger.profilePicture}}" alt="Passenger's profile picture" class="passenger-photo">
+                                <div class="booking-details">
+                                    <p><strong>Passenger:</strong> {{this.passenger.name}}</p>
+                            {{else}}
+                                <div class="booking-details">
+                                    <p><strong>Passenger:</strong> Unknown</p>
+                            {{/if}}
+                            
+                                <p><strong>Booking ID:</strong> {{this.bookingID}}</p>
+                                <p><strong>Status:</strong> {{this.rideStatus}}</p>
+                                </div>
+                        </a>
+                        <div class="booking-actions">
+                            {{#if (eq this.rideStatus 'pending')}}
+                                <button class="start-ride" data-booking-id="{{this.bookingID}}">On the Way</button>
+                            {{/if}}
+                            {{#if (eq this.rideStatus 'ongoing')}}
+                                <button class="complete-ride" data-booking-id="{{this.bookingID}}">Complete</button>
+                            {{/if}}
+                            <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel</button>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        {{else}}
+            <p>No bookings scheduled for today.</p>
+        {{/if}}
+    </div>
+
     <div class="accepted-bookings">
-        <h2>Accepted Bookings</h2>
+        <h2>Other Accepted Bookings</h2>
         {{#if acceptedBookings.length}}
             <ul class="booking-list">
                 {{#each acceptedBookings}}
                     <li class="booking-item">
+                        <a href="/booking/bookingDetails/{{this.bookingID}}">
                         {{#if this.passenger}}
                             <img src="{{this.passenger.profilePicture}}" alt="Passenger's profile picture" class="passenger-photo">
                             <div class="booking-details">
@@ -19,6 +58,7 @@
                         <p><strong>Dates:</strong> {{formatDates this.bookingDates}}</p>
                         <p><strong>Status:</strong> {{this.rideStatus}}</p>
                         </div>
+                        </a>
                         {{#if (isActive this.rideStatus this.responseStatus)}}
                             <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
                         {{/if}}
@@ -26,7 +66,7 @@
                 {{/each}}
             </ul>
         {{else}}
-            <p>No accepted bookings yet.</p>
+            <p>No other accepted bookings.</p>
         {{/if}}
     </div>
 
@@ -36,6 +76,7 @@
             <ul class="booking-list">
                 {{#each pendingBookings}}
                     <li class="booking-item">
+                        <a href="/booking/bookingDetails/{{this.bookingID}}">
                         {{#if this.passenger}}
                             <img src="{{this.passenger.profilePicture}}" alt="Passenger's profile picture" class="passenger-photo">
                             <div class="booking-details">
@@ -47,6 +88,7 @@
                         <p><strong>Booking ID:</strong> {{this.bookingID}}</p>
                         <p><strong>Dates:</strong> {{formatDates this.bookingDates}}</p>
                         </div>
+                        </a>
                         <div class="booking-actions">
                             <button class="accept-booking" data-booking-id="{{this.bookingID}}">Accept</button>
                             <button class="reject-booking" data-booking-id="{{this.bookingID}}">Reject</button>
@@ -61,30 +103,19 @@
 </div>
 
 <script>
-    function handleBookingAction(bookingId, action) {
-        fetch(`/booking/${bookingId}/${action}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (data.warning) {
-                    alert(data.warning);
-                }
-                alert(data.message);
-                location.reload(); // Reload the page to reflect the changes
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again.');
+    document.querySelectorAll('.start-ride').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            handleBookingAction(bookingId, 'start');
         });
-    }
+    });
+
+    document.querySelectorAll('.complete-ride').forEach(button => {
+        button.addEventListener('click', function() {
+            const bookingId = this.getAttribute('data-booking-id');
+            handleBookingAction(bookingId, 'complete');
+        });
+    });
 
     document.querySelectorAll('.accept-booking').forEach(button => {
         button.addEventListener('click', function() {
@@ -108,4 +139,27 @@
             }
         });
     });
+
+    function handleBookingAction(bookingId, action) {
+        fetch(`/booking/${bookingId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                // Reload the page through router to reflect the changes
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
 </script>

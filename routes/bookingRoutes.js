@@ -12,6 +12,9 @@ router.get('/dashboard', bookingController.driverDashboard);
 router.post('/:id/accept', bookingController.acceptBooking);
 router.post('/:id/reject', bookingController.rejectBooking);
 router.post('/:id/cancel', bookingController.cancelBooking);
+router.post('/:id/complete', bookingController.completeBooking);
+router.post('/:id/start', bookingController.startBooking);
+router.get('/bookingDetails/:id', bookingController.viewBookingDetails);
 
 router.get('/myBookings', bookingController.viewMyBookings);
 router.get('/:id', bookingController.getBookingForm);
