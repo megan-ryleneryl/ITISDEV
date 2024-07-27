@@ -11,17 +11,17 @@
                 <li><a href="/ride/driverhome">Post your Ride</a></li>
                 <li class="user-dropdown">
                     {{#if user}}
-                    <img class="usericon-header" src={{user.userImage}}>
+                    <img id="user-icon" class="usericon-header" src={{user.profilePicture}}>
                     <ul class="dropdown-menu" id="dropdown-menu">
                         <li><a href="/user/account" class="dropdown-item">View Account</a></li>
                         <li><a href="/user/rides" class="dropdown-item">Check Rides</a></li>
-                        <li><a href="/user/logout" class="dropdown-item">Logout</a></li>
+                        <li><a href="/auth/logout" class="dropdown-item">Logout</a></li>
                     </ul>
                     {{else}}
                     <a href="#" id="user-icon"><i class="fa-solid fa-user"></i></a>
                     <ul class="dropdown-menu" id="dropdown-menu">
                         <li><a href="/login" class="dropdown-item">Login</a></li>
-                        <li><a href="/register" class="dropdown-item">Register</a></li>
+                        <li><a href="/auth/register" class="dropdown-item">Register</a></li>
                     </ul>
                     {{/if}}
                 </li>     

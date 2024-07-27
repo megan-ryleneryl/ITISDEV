@@ -8,22 +8,8 @@
           Incorrect credentials. Please try again.
         {{/if}}
         <form action="/login" method="POST" id="login-form">
-          <input
-            type="text"
-            class="input-box"
-            id="username"
-            placeholder="Username"
-            name="username"
-            required
-          />
-          <input
-            type="password"
-            class="input-box"
-            id="password"
-            placeholder="Password"
-            name="password"
-            required
-          />
+          <input type="email" name="email" id="email" placeholder="Email" required>
+          <input type="password" name="password" id="password" placeholder="Password" required>
           <div class="remember-me">
             <label class="checkbox-container">
               Remember me

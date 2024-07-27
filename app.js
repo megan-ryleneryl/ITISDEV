@@ -171,6 +171,11 @@ app.use('/chat', chatRoutes); // Use the chatRoutes module for all routes starti
 const University = require('./models/University');
 const City = require('./models/City');
 
+app.use((req, res, next) => {
+    res.locals.user = req.user || null; // Make user available in all views
+    next();
+});
+
 app.get('/', (req, res) => {
     // Get universities and cities from db concurrently
     Promise.all([University.find(), City.find()])
@@ -210,7 +215,7 @@ app.post('/login',
         } else {
             req.session.cookie.expires = false; // Cookie expires at end of session
         }
-      res.redirect('/index'); 
+      res.redirect('/'); 
     }
 );
 
@@ -237,61 +242,26 @@ app.get('/login-failed', (req, res) => {
     });
 });
 
-// app.delete('/logout', (req, res) => {
-//     req.logout((err) => {
-//         if (err) {
-//             return next(err);
-//         }
-//         res.redirect('/');
-//     });
-// })
-
-//console.log(app._router.stack);
 
 
 // Route to display registration form
-app.get('/register', (req, res) => {
-    res.render('user/register', {
-        title: "Register",
-        css: ["register.css"],
-        layout: "bodyOnly",
-    });
-});
+// app.get('/register', (req, res) => {
+//     res.render('user/register', {
+//         title: "Register",
+//         css: ["register.css"],
+//         layout: "bodyOnly",
+//     });
+// });
 
-// Route to handle registration form submission
-app.post('/register', async (req, res) => {
-    try {
-        const { name, email, password, phoneNumber, universityID, profilePicture, driverLicense, carMake, carModel, carPlate } = req.body;
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new user object
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword,
-            phoneNumber,
-            universityID,
-            profilePicture,
-            driverLicense,
-            carMake,
-            carModel,
-            carPlate,
-            balance: 0,
-            isVerified: false,
-        });
-
-        // Save the user to the database
-        await newUser.save();
-
-        res.redirect('/login'); // Redirect to login page after successful registration
-    } catch (error) {
-        console.error(error);
-        res.redirect('/register');
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) { // Assuming you are using Passport.js
+        res.locals.user = req.user;
+        return next();
     }
-});
-
+    res.redirect('/login');
+}
 
 
 const cron = require('node-cron');
@@ -307,4 +277,4 @@ const { autoRejectDueBookings } = require('./controllers/bookingController');
 cron.schedule('* * * * *', () => {
     console.log('Running auto-reject task');
     autoRejectDueBookings();
-});
+}); 
