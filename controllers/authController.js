@@ -6,7 +6,7 @@ const User = require('../models/User'); // Adjust the path as necessary
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../public/img');
+        const uploadPath = path.join(__dirname, '../public/profile-pictures');
         console.log('Upload path:', uploadPath); // Debugging: Check the upload path
         cb(null, uploadPath);
     },
@@ -25,7 +25,7 @@ async function uploadUser(req, res) {
 
      // Set default profile picture
     if (req.file) {
-        filename = "/img/" + req.file.filename;
+        filename = "/profile-pictures/" + req.file.filename;
         console.log(`File uploaded: ${filename}`);
     } else {
         console.log('No file uploaded, using default profile picture');

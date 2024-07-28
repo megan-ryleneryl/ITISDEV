@@ -13,7 +13,7 @@ const authController = require('../controllers/authController.js');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../public/img');
+        const uploadPath = path.join(__dirname, '../public/profile-pictures');
         console.log('Upload path:', uploadPath); // Debugging: Check the upload path
         cb(null, uploadPath);
     },
