@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 module.exports = router; // Export router so it can be used in app.js
+
 const { uploadUser } = require('../controllers/authController.js');
 const multer = require('multer'); // This is only if there will be file uploads
 const path = require('path');

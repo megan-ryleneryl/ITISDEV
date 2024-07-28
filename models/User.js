@@ -8,7 +8,9 @@ const UserSchema = new mongoose.Schema({
   phoneNumber: { type: String }, // Philippine number
   universityID: { type: Number, required: true }, // All users have 10001 University ID
   profilePicture: { type: String, default: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" }, //Use the default pfp
-  isVerified: { type: Boolean, default: false }, //This is to determine if the user is a verified driver.
+  enrollmentProof: { type: String }, //This is to determine if the user is a student.
+  isVerifiedPassenger: { type: Boolean, default: false }, //This is to determine if the user is a verified passenger.
+  isVerifiedDriver: { type: Boolean, default: false }, //This is to determine if the user is a verified driver.
   balance: {type: Number, default: 0 }, 
   driverLicense: { type: String },
   carMake: { type: String },
