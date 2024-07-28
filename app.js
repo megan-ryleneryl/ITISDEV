@@ -243,18 +243,6 @@ app.get('/login-failed', (req, res) => {
 });
 
 
-
-// Route to display registration form
-// app.get('/register', (req, res) => {
-//     res.render('user/register', {
-//         title: "Register",
-//         css: ["register.css"],
-//         layout: "bodyOnly",
-//     });
-// });
-
-
-
 function ensureAuthenticated(req, res, next) {
     if (req.isAuthenticated()) { // Assuming you are using Passport.js
         res.locals.user = req.user;
