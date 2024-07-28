@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 module.exports = router; // Export router so it can be used in app.js
 
-const { uploadUser } = require('../controllers/authController.js');
+/* Import Multer & Path */
 const multer = require('multer'); // This is only if there will be file uploads
 const path = require('path');
 
@@ -14,13 +14,13 @@ const authController = require('../controllers/authController.js');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = path.join(__dirname, '../public/profile-pictures');
-        console.log('Upload path:', uploadPath); // Debugging: Check the upload path
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
+
 const upload = multer({ storage: storage });
 
 /* Define Routes */
@@ -33,7 +33,10 @@ router.get('/register', (req, res) => {
 });
 
 
-router.post('/new', upload.single('profilePicture'), uploadUser);
+router.post('/new', upload.single("profilePicture"), (req, res) => {
+    authController.uploadUser(req, res);
+    console.log('Request file:', req.file); // Debugging: Check the request file
+});
 
 // Logout Route
 router.get('/logout', (req, res) => {

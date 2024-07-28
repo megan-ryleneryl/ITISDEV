@@ -1,13 +1,12 @@
 /* Import Models */
 const bcrypt = require('bcrypt');
-const multer = require('multer');
 const path = require('path');
 const User = require('../models/User'); // Adjust the path as necessary
 
+const multer = require('multer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const uploadPath = path.join(__dirname, '../public/profile-pictures');
-        console.log('Upload path:', uploadPath); // Debugging: Check the upload path
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
@@ -18,18 +17,9 @@ const upload = multer({ storage: storage });
 
 async function uploadUser(req, res) {
     const { name, email, password, phoneNumber, universityID } = req.body;
-    let filename = "img/profile-pic-1.png";
 
     console.log('Request body:', req.body); // Debugging: Check the request body
-    console.log('Request file:', req.file); // Debugging: Check the request file
-
-     // Set default profile picture
-    if (req.file) {
-        filename = "/profile-pictures/" + req.file.filename;
-        console.log(`File uploaded: ${filename}`);
-    } else {
-        console.log('No file uploaded, using default profile picture');
-    }
+    
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const exists = await User.find({ email: email });
@@ -46,7 +36,7 @@ async function uploadUser(req, res) {
                 password: hashedPassword,
                 phoneNumber: phoneNumber,
                 universityID: universityID,
-                profilePicture: filename,
+                profilePicture: req.file ? "/profile-pictures/" + req.file.filename : "/profile-pictures/default.png",
                 enrollmentProof: '',
                 isVerifiedPassenger: false,
                 isVerifiedDriver: false,
@@ -67,7 +57,7 @@ async function uploadUser(req, res) {
         }
     } else {
         console.log('Registration failed. Email already exists.');
-        res.redirect('/register');
+        res.redirect('/auth/register');
     }
 }
 

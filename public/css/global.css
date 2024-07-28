@@ -80,14 +80,17 @@ flex-direction: row;
 justify-content: right;
 padding: 15px 15px;
 width: 100%;
+align-self: center;
 }
 
 li{
 padding: 0px 15px;
+align-self: center;
 }
 
 .user-dropdown {
   position: relative;
+  align-self: center;
 }
 
 .dropdown-menu {
@@ -154,4 +157,7 @@ footer img{
 
 #user-icon{
   cursor: pointer;
+  height: 30px;
+  width: 30px;
+  object-fit: cover;
 }
