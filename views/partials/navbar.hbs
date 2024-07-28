@@ -7,14 +7,17 @@
         >
         </a>
             <ul class="nav-links">
+                <li> Hello! {{user.name}}</li>
                 <li><a href="/">Search</a></li>
                 <li><a href="/ride/driverhome">Post your Ride</a></li>
                 <li class="user-dropdown">
                     {{#if user}}
                     <img id="user-icon" class="usericon-header" src={{user.profilePicture}}>
                     <ul class="dropdown-menu" id="dropdown-menu">
+                        <li><a href="/booking/dashboard" class="dropdown-item">Driver Dashboard</a></li>
+                        <li><a href="/booking/myBookings" class="dropdown-item">My Bookings</a></li>
+                        <li><a href="/ride/myRides" class="dropdown-item">My Rides</a></li>
                         <li><a href="/user/account" class="dropdown-item">View Account</a></li>
-                        <li><a href="/user/rides" class="dropdown-item">Check Rides</a></li>
                         <li><a href="/auth/logout" class="dropdown-item">Logout</a></li>
                     </ul>
                     {{else}}

@@ -40,7 +40,6 @@ const userRoutes = require('./routes/userRoutes');
 const rideRoutes = require('./routes/rideRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
-const contestRoutes = require('./routes/contestRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 
 // Import all models
@@ -79,6 +78,16 @@ const hbs = exphbs.create({
         formatTime1: function(timeObj) {
             return `${timeObj.hour.toString().padStart(2, '0')}:${timeObj.minute.toString().padStart(2, '0')}`;
         },
+        formatTime2: function(time) {
+            if (!time || !time.hour || !time.minute) {
+                return '';
+              }
+              
+              const hour = time.hour.toString().padStart(2, '0');
+              const minute = time.minute.toString().padStart(2, '0');
+              
+              return `${hour}:${minute}`;
+        },
         formatDate: function (date) {
         return new Date(date).toLocaleDateString();
         },
@@ -110,6 +119,12 @@ const hbs = exphbs.create({
         includes: function(item, list) {
             return list.includes(item);
         },
+        includes2: function(array, value) {
+            if (Array.isArray(array)) {
+                return array.includes(value);
+            }
+            return false;
+        },
         isActive: function(rideStatus, responseStatus) {
             if (rideStatus === 'completed' || responseStatus === 'rejected' || rideStatus === 'cancelled') {
                 return false;
@@ -122,7 +137,11 @@ const hbs = exphbs.create({
         },
         not: function (a){
             return !a
-        }
+        },
+        firstChar: function (str) {
+            return str.charAt(0).toUpperCase();
+        },
+
     },
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
@@ -165,7 +184,6 @@ app.use('/user', userRoutes); // Use the userRoutes module for all routes starti
 app.use('/ride', rideRoutes); // Use the rideRoutes module for all routes starting with /ride
 app.use('/booking', bookingRoutes); // Use the bookingRoutes module for all routes starting with /booking
 app.use('/review', reviewRoutes); // Use the reviewRoutes module for all routes starting with /review
-app.use('/contest', contestRoutes); // Use the contestRoutes module for all routes starting with /contest
 app.use('/chat', chatRoutes); // Use the chatRoutes module for all routes starting with /chat
 
 const University = require('./models/University');

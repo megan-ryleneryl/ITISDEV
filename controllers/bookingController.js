@@ -87,10 +87,10 @@ async function getBookingForm(req, res) {
 
 async function bookRide(req, res) {
     const { rideId, dates } = req.body;
-    // const passengerId = req.user.userId; // Assuming you have authentication and can get the user ID
+    const passengerId = req.user.userID;
+
   
-    // Sample passenger ID for testing
-    const passengerId = 20001;
+
   
     try {
       // Get the last booking ID
@@ -169,7 +169,7 @@ async function bookRide(req, res) {
 
 async function viewMyBookings(req, res) {
     try {
-        const userID = req.user ? req.user.userID : 20001;
+        const userID = req.user.userID;
         const bookings = await Booking.find({ passengerID: userID }).sort('bookingDate');
 
         const bookingsWithDetails = await Promise.all(bookings.map(async (booking) => {
@@ -221,7 +221,7 @@ async function confirmPayment(req, res) {}
 
 async function driverDashboard(req, res) {
     try {
-        const driverID = req.user ? req.user.userID : 20001;
+        const driverID = req.user.userID;
         const rides = await Ride.find({ driverID: driverID });
         const bookings = await Booking.find({ 
             rideID: { $in: rides.map(ride => ride.rideID) }

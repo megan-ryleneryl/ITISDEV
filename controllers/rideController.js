@@ -67,10 +67,9 @@ async function postRide(req, res) {
 
 
 
-    // const driverID = req.user.userID;
+    const driverID = req.user.userID;
 
-    // Temporary driverID for testing
-    const driverID = 20001;
+
 
     // Check if the driver has sufficient balance
     const driver = await User.findOne({ userID: driverID });
@@ -263,9 +262,26 @@ async function getEditRideForm(req, res) {
       req.flash('error', 'You are not authorized to edit this ride');
       return res.redirect('/ride');
     }
+
+    //Get All Names of Universities and Cities
+    const universities = await University.find();
+    const cities = await City.find();
+
+    pickupLocations = [];
+    dropoffLocations = [];
+
+    for (const university of universities) {
+      dropoffLocations.push(university.name);
+    }
+    for (const city of cities) {
+      pickupLocations.push(city.name);
+    }
     res.render('ride/edit', { 
       title: 'Edit Ride',
       ride,
+      pickupLocations,
+      dropoffLocations,
+      css: ['index.css','ride.css'],
       user: req.user,
       messages: {
         error: req.flash('error'),
@@ -290,9 +306,9 @@ async function editRide(req, res) {
       pickupAreas,
       availableDays,
       departureTime,
-      arrivalTime,
       numSeats,
-      price
+      price,
+      status
     } = req.body;
 
     const ride = await Ride.findOne({ rideID: req.params.id });
@@ -305,17 +321,45 @@ async function editRide(req, res) {
       return res.redirect('/ride');
     }
 
+        // Parse departure time
+        const [hours, minutes] = departureTime.split(':').map(Number);
+
+        if (isNaN(hours) || isNaN(minutes)) {
+          req.flash('error', 'Invalid departure time format');
+          return res.redirect('/ride/new');
+        }
+    
+        // Fix Arrival Time 2 hrs after departure time
+        const arrivalTime = new Date();
+        arrivalTime.setHours(hours, minutes, 0);
+        arrivalTime.setHours(arrivalTime.getHours() + 2);
+    
+        //Parse Arrival Time
+        const [arrivalHours, arrivalMinutes] = arrivalTime.toTimeString().split(':').map(Number);
+        if (isNaN(arrivalHours) || isNaN(arrivalMinutes)) {
+          req.flash('error', 'Invalid arrival time format');
+          return res.redirect('/ride/new');
+        }
+
+
     // Update ride details
     ride.rideType = rideType;
     ride.pickupPoint = pickupPoint;
     ride.dropoffPoint = dropoffPoint;
     ride.route = route;
-    ride.pickupAreas = pickupAreas;
-    ride.availableDays = availableDays;
-    ride.departureTime = departureTime;
-    ride.arrivalTime = arrivalTime;
-    ride.numSeats = numSeats;
-    ride.price = price;
+    ride.pickupAreas = pickupAreas ? pickupAreas.split(',').map(area => area.trim()) : [];
+    ride.availableDays = Array.isArray(availableDays) ? availableDays : [availableDays];
+    ride.departureTime = {
+      hour: hours,
+      minute: minutes
+    };
+    ride.arrivalTime = {
+      hour: arrivalHours,
+      minute: arrivalMinutes
+    };
+    ride.numSeats = parseInt(numSeats);
+    ride.price = parseFloat(price);
+    ride.status = status;
 
     await ride.save();
 
@@ -333,12 +377,10 @@ async function deleteRide(req, res) {
   try {
     const ride = await Ride.findOne({ rideID: req.params.id });
     if (!ride) {
-      req.flash('error', 'Ride not found');
-      return res.redirect('/ride');
+      return res.status(404).json({ success: false, message: 'Ride not found' });
     }
     if (ride.driverID !== req.user.userID) {
-      req.flash('error', 'You are not authorized to delete this ride');
-      return res.redirect('/ride');
+      return res.status(403).json({ success: false, message: 'You are not authorized to delete this ride' });
     }
 
     // Instead of deleting, set status to inactive
@@ -351,16 +393,34 @@ async function deleteRide(req, res) {
       { $set: { status: 'cancelled' } }
     );
 
-    req.flash('success', 'Ride deleted successfully');
-    res.redirect('/ride');
+    res.json({ success: true, message: 'Ride deactivated successfully' });
   } catch (error) {
-    console.error('Error deleting ride:', error);
-    req.flash('error', 'Error deleting ride: ' + error.message);
-    res.redirect('/ride');
+    console.error('Error deactivating ride:', error);
+    res.status(500).json({ success: false, message: 'Error deactivating ride: ' + error.message });
   }
 }
 
+async function viewMyRides(req, res) {
+  try {
+      const driverID = req.user.userID;
+      const rides = await Ride.find({ driverID: driverID }).sort('-createdAt');
 
+      res.render('ride/myRides', { 
+          title: 'My Rides',
+          rides,
+          css: ['ride.css'],
+          user: req.user,
+          messages: {
+              error: req.flash('error'),
+              success: req.flash('success')
+          }
+      });
+  } catch (error) {
+      console.error('Error viewing my rides:', error);
+      req.flash('error', 'Error loading your rides');
+      res.redirect('/');
+  }
+}
 
 module.exports = {
   getDriverHome,
@@ -371,5 +431,6 @@ module.exports = {
   viewRideDetails,
   getEditRideForm,
   editRide,
-  deleteRide
+  deleteRide,
+  viewMyRides
 };

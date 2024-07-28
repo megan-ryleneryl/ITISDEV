@@ -113,9 +113,39 @@
           <div class="ride-actions">
             <a href="/ride/{{ride.rideID}}/edit" class="btn btn-primary">Edit Ride</a>
             <a href="/ride/new" class="btn btn-primary">Create Another Ride</a>
-            <form action="/ride/{{ride.rideID}}?_method=DELETE" method="POST" style="display: inline;">
-              <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this ride?');">Delete Ride</button>
-            </form>
+            {{#if (eq ride.status 'active')}}
+                <button class="btn btn-danger" data-ride-id="{{this.rideID}}">Deactivate Ride</button>
+            {{/if}}
           </div>
         {{/if}}
       </div>
+
+<script>
+
+    document.querySelectorAll('.btn-danger').forEach(button => {
+        button.addEventListener('click', function() {
+            const rideId = {{ride.rideID}}
+            if (confirm('Are you sure you want to deactivate this ride?')) {
+                fetch(`/ride/${rideId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,65 @@
+<div style="margin-top: 100px;"></div>
+
+<h1>My Rides</h1>
+
+<div class="rides-container">
+    {{#if rides.length}}
+        <ul class="ride-list">
+            {{#each rides}}
+                <div class="ride-item">
+                    <a href="/ride/{{this.rideID}}">
+                        <h2>Ride ID: {{this.rideID}}</h2>
+                        <p>From: {{this.pickupPoint}} to {{this.dropoffPoint}}</p>
+                        <p>Type: {{this.rideType}}</p>
+                        <p>Departure: {{formatTime1 this.departureTime}}</p>
+                        <p>Available Seats: {{this.numSeats}}</p>
+                        <p>Price: ₱{{this.price}}</p>
+                        <p>Status: {{this.status}}</p>
+                    </a>
+                    <button class="edit-ride" data-ride-id="{{this.rideID}}">Edit Ride</button>
+                    {{#if (eq this.status 'active')}}
+                        <button class="delete-ride" data-ride-id="{{this.rideID}}">Deactivate Ride</button>
+                    {{/if}}
+                </div>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p>You haven't posted any rides yet.</p>
+    {{/if}}
+</div>
+
+<script>
+    document.querySelectorAll('.edit-ride').forEach(button => {
+        button.addEventListener('click', function() {
+            const rideId = this.getAttribute('data-ride-id');
+            window.location.href = `/ride/${rideId}/edit`;
+        });
+    });
+
+    document.querySelectorAll('.delete-ride').forEach(button => {
+        button.addEventListener('click', function() {
+            const rideId = this.getAttribute('data-ride-id');
+            if (confirm('Are you sure you want to deactivate this ride?')) {
+                fetch(`/ride/${rideId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        });
+    });
+</script>
