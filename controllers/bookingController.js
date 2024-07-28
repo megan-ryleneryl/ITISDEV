@@ -243,7 +243,7 @@ async function driverDashboard(req, res) {
             };
         }));
 
-        console.log(bookingsWithPassengerDetails);
+
 
         const todayBookings = bookingsWithPassengerDetails.filter(booking => 
             booking.bookingDate.setHours(0, 0, 0, 0) === today.getTime() &&
