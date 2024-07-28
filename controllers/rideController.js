@@ -380,7 +380,7 @@ async function deleteRide(req, res) {
       return res.status(404).json({ success: false, message: 'Ride not found' });
     }
     if (ride.driverID !== req.user.userID) {
-      return res.status(403).json({ success: false, message: 'You are not authorized to delete this ride' });
+      return res.status(403).json({ success: false, message: 'You are not authorized to manipulate this ride' });
     }
 
     // Instead of deleting, set status to inactive

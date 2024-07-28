@@ -14,12 +14,21 @@
                     {{#if user}}
                     <img id="user-icon" class="usericon-header" src={{user.profilePicture}}>
                     <ul class="dropdown-menu" id="dropdown-menu">
-                        <li><a href="/booking/dashboard" class="dropdown-item">Driver Dashboard</a></li>
+                        {{#if user.isVerifiedPassenger}}
                         <li><a href="/booking/myBookings" class="dropdown-item">My Bookings</a></li>
-                        <li><a href="/ride/myRides" class="dropdown-item">My Rides</a></li>
+                            {{#if (eq user.isVerifiedDriver false)}}
+                            <li><a href="#" class="dropdown-item">Be a Driver</a></li>
+                            {{/if}}
+                        {{/if}}
+
+                        {{#if user.isVerifiedDriver}}
+                            <li><a href="/ride/myRides" class="dropdown-item">My Rides</a></li>
+                            <li><a href="/booking/dashboard" class="dropdown-item">Driver Dashboard</a></li>
+                        {{/if}}    
                         <li><a href="/user/account" class="dropdown-item">View Account</a></li>
                         <li><a href="/auth/logout" class="dropdown-item">Logout</a></li>
                     </ul>
+
                     {{else}}
                     <a href="#" id="user-icon"><i class="fa-solid fa-user"></i></a>
                     <ul class="dropdown-menu" id="dropdown-menu">
