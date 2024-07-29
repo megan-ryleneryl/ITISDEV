@@ -7,29 +7,29 @@ async function deleteProfile(req, res) {}
 async function withdrawBalance(req, res) {}
 
 async function getProfilePage(req, res) {
-    // try {
-    //     const loggedUser = req.user; // The logged in user
-    //     const queryID = req.params.userID; // The profile page being viewed
-    //     const user = await User.findOne({ userID: queryID }); // The user data of the profile page being viewed
-
-    //     const users = await User.find({ // All other users
-    //         userID: { 
-    //             $nin: [loggedUser.userID, queryID, '10000'] 
-    //         } 
-    //     });
-
-    //     res.render('../views/profile.hbs', {
-    //         layout: 'main.hbs', // Layout file to use
-    //         title: 'View Profile', // Title of the page
-    //         css: ['profile.css'], // Array of CSS files to include
-    //         view: 'profile', // View file to use
-    //         userData: users,
-    //         profileUser: user,
-    //         user: req.user, // User info
-    //     });
-    // } catch(error) {
-    //     console.error(error);
-    // }
+    try {
+        const userID = req.params.userID || req.user.userID;
+        const user = await User.findOne({ userID: userID });
+    
+        if (!user) {
+          req.flash('error', 'User not found');
+          return res.redirect('/');
+        }
+    
+        res.render('/user/account', {
+          title: 'Account Details',
+          css: ['account-details.css'], // Create this CSS file for styling
+          user: user,
+          messages: {
+            error: req.flash('error'),
+            success: req.flash('success')
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching account details:', error);
+        req.flash('error', 'Error loading account details');
+        res.redirect('/');
+      }
 }
 
 
