@@ -16,7 +16,7 @@ async function getProfilePage(req, res) {
           return res.redirect('/');
         }
     
-        res.render('/user/account', {
+        res.render('user/account', {
           title: 'Account Details',
           css: ['account-details.css'], // Create this CSS file for styling
           user: user,
@@ -61,7 +61,7 @@ async function createDriver(req, res) {
 
         if (updatedUser) {
             console.log('Updated user to driver successfully!');
-            res.redirect('/');
+            res.redirect('/user/account');
         }
     } catch (error) {
         console.error(error);
