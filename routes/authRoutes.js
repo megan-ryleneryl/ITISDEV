@@ -13,7 +13,12 @@ const authController = require('../controllers/authController.js');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../public/profile-pictures');
+        let uploadPath;
+        if (file.fieldname === 'profilePicture') {
+            uploadPath = path.join(__dirname, '../public/profile-pictures');
+        } else if (file.fieldname === 'enrollmentProof') {
+            uploadPath = path.join(__dirname, '../public/enrollment-proofs');
+        }
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
@@ -33,9 +38,9 @@ router.get('/register', (req, res) => {
 });
 
 
-router.post('/new', upload.single("profilePicture"), (req, res) => {
+router.post('/new', upload.fields([{ name: 'profilePicture' }, { name: 'enrollmentProof' }]), (req, res) => {
     authController.uploadUser(req, res);
-    console.log('Request file:', req.file); // Debugging: Check the request file
+    console.log('Request files:', req.files); // Debugging: Check the request files
 });
 
 // Logout Route

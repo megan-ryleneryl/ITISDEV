@@ -6,13 +6,19 @@ const User = require('../models/User'); // Adjust the path as necessary
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../public/profile-pictures');
+        let uploadPath;
+        if (file.fieldname === 'profilePicture') {
+            uploadPath = path.join(__dirname, '../public/profile-pictures');
+        } else if (file.fieldname === 'enrollmentProof') {
+            uploadPath = path.join(__dirname, '../public/enrollment-proofs');
+        }
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
+
 const upload = multer({ storage: storage });
 
 async function uploadUser(req, res) {
@@ -36,8 +42,8 @@ async function uploadUser(req, res) {
                 password: hashedPassword,
                 phoneNumber: phoneNumber,
                 universityID: universityID,
-                profilePicture: req.file ? "/profile-pictures/" + req.file.filename : "/profile-pictures/default.png",
-                enrollmentProof: '',
+                profilePicture: req.files['profilePicture'] ? "/profile-pictures/" + req.files['profilePicture'][0].filename : "/profile-pictures/default.png",
+                enrollmentProof: req.files['enrollmentProof'] ? "/profile-pictures/" + req.files['enrollmentProof'][0].filename : '',
                 isVerifiedPassenger: false,
                 isVerifiedDriver: false,
                 balance: 0,

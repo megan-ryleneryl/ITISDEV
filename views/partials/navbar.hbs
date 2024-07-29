@@ -17,7 +17,7 @@
                         {{#if user.isVerifiedPassenger}}
                         <li><a href="/booking/myBookings" class="dropdown-item">My Bookings</a></li>
                             {{#if (eq user.isVerifiedDriver false)}}
-                            <li><a href="#" class="dropdown-item">Be a Driver</a></li>
+                            <li><a href="/user/newdriver" class="dropdown-item">Be a Driver</a></li>
                             {{/if}}
                         {{/if}}
 
