@@ -42,33 +42,13 @@
 {{/if}}
 
 {{#if (not (eq user.userID booking.passengerID))}}
-    <button class="message-passenger" data-passenger-id="{{booking.passengerID}}">Message Passenger</button>
+    <a href="/chat/{{booking.passengerID}}" class="button-link">Message Passenger</a>
 {{else}}
-    <button class="message-driver" data-driver-id="{{ride.driverID}}">Message Driver</button>
+    <a href="/chat/{{ride.driverID}}" class="button-link">Message Driver</a>
 {{/if}}
 
 <script>
-    document.querySelectorAll('.message-driver').forEach(button => {
-        button.addEventListener('click', function() {
-            const driverId = this.getAttribute('data-driver-id');
-            // logic to open a chat with the driver
-            // This could be opening a chat modal or redirecting to a chat page
-            // TO BE IMPLEMENTED IN THE FUTURE
-            console.log('Open chat with driver:', driverId);
-            // Example: window.location.href = `/chat/${driverId}`;
-        });
-    });
 
-    document.querySelectorAll('.message-passenger').forEach(button => {
-        button.addEventListener('click', function() {
-            const passengerId = this.getAttribute('data-passenger-id');
-            // logic to open a chat with the passenger
-            // This could be opening a chat modal or redirecting to a chat page
-            // TO BE IMPLEMENTED IN THE FUTURE
-            console.log('Open chat with passenger:', passengerId);
-            // Example: window.location.href = `/chat/${passengerId}`;
-        });
-    });
 
     document.querySelectorAll('.cancel-booking').forEach(button => {
         button.addEventListener('click', function() {

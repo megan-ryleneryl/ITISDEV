@@ -72,7 +72,7 @@ async function getBookingForm(req, res) {
         calendarDaysNextMonth: calendarDaysNextMonth,
         formatMonth: formatMonth,
         isEndOfWeek: isEndOfWeek,
-        css: ['index.css'],
+        css: ['booking.css'],
         layout: "main",
         user: req.user,
         messages: {

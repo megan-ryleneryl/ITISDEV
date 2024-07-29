@@ -1,4 +1,4 @@
-<div style="margin-top: 100px;"></div>
+
 <div class="booking-container">
   <h1>{{title}}</h1>
 
@@ -16,7 +16,7 @@
     <img src="{{driver.profilePicture}}" alt="Driver profile picture" class="driver-photo">
     <p>{{driver.name}}</p>
     <p>{{driver.rating}} ratings</p>
-    <button class="contact-driver">Contact Driver</button>
+    <a href="/chat/{{driver.userID}}" class="button-link">Message Driver</a>
   </div>
 
   <div class="vehicle-info">
@@ -80,7 +80,7 @@
     </div>
   </div>
 
-  <button id="bookRideBtn" class="book-ride-btn">Book Ride</button>
+  <button id="bookRideBtn" class="button-link">Book Ride</button>
 </div>
 
 

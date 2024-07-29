@@ -7,3 +7,9 @@
 .booking-item:hover {
   background-color: #f0f0f0;
 }
+
+
+
+.booking-container {
+  margin-top: 100px;
+}

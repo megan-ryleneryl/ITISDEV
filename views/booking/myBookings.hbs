@@ -31,7 +31,7 @@
                         {{#if (isActive this.rideStatus this.responseStatus)}}
                             <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
                         {{/if}}
-                        <button class="message-driver" data-driver-id="{{this.ride.driverID}}">Message Driver</button>
+                            <a href="/chat/{{this.ride.driverID}}" class="button-link">Message Driver</a>
                     </div>
                 {{/each}}
             </ul>
@@ -69,7 +69,7 @@
                         {{#if (isActive this.rideStatus this.responseStatus)}}
                             <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
                         {{/if}}
-                        <button class="message-driver" data-driver-id="{{this.ride.driverID}}">Message Driver</button>
+                                <a href="/chat/{{this.ride.driverID}}" class="button-link">Message Driver</a>
                     </div>
                 {{/each}}
             </ul>
@@ -114,14 +114,5 @@
         });
     });
 
-    document.querySelectorAll('.message-driver').forEach(button => {
-        button.addEventListener('click', function() {
-            const driverId = this.getAttribute('data-driver-id');
-            // logic to open a chat with the driver
-            // This could be opening a chat modal or redirecting to a chat page
-            // TO BE IMPLEMENTED IN THE FUTURE
-            console.log('Open chat with driver:', driverId);
-            // Example: window.location.href = `/chat/${driverId}`;
-        });
-    });
+
 </script>

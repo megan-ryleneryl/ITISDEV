@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt'); // For hashing passwords
 const User = require('./models/User'); // Import the User model
 
+
 /* Connect to MongoDB and then Listen for Requests */
 /**
  * admin is the username
@@ -30,6 +31,7 @@ const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
+const MongoStore = require('connect-mongo');
 
 const initializePassport = require('./passport-config.js');
 initializePassport(passport);
@@ -161,22 +163,39 @@ app.use(session({
     secret: 'CKA8mqzpyGEuQRCZHJHhK39qCbtxYwu8',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ 
+        mongoUrl: dbURI,
+        collectionName: 'sessions' // Optional: specify the collection name
+    }),
+    cookie: { 
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(methodOverride('_method')); // To allow the POST logout form to become a DELETE request
 
+// Middleware to check and refresh session
+app.use((req, res, next) => {
+    if (req.session.cookie.maxAge && req.session.cookie.maxAge < 10 * 60 * 1000) {
+        req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // Refresh to 24 hours
+    }
+    next();
+});
 
-// For about page -> Idk if we still need this, but this is where i listed my specs
-// app.get('/about', (req, res) => {
-//     res.render('../views/about.hbs', {
-//         layout: 'main.hbs', // Layout file to use
-//         title: 'About', // Title of the page
-//         css: ['about.css'], // Array of CSS files to include
-//         user: req.user, // User
-//     })
-// });
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Middleware to log session info (for debugging)
+app.use((req, res, next) => {
+    console.log('Session ID:', req.sessionID);
+    console.log('Is Authenticated:', req.isAuthenticated());
+    next();
+});
+
+
 
 // App Routes
 app.use('/auth', authRoutes); // Use the authRoutes module for all routes starting with /auth
@@ -227,13 +246,12 @@ app.post('/login',
         failureFlash: true
     }),
     function(req, res) {
-        // This function is for checking if remember me was clicked
         if (req.body.rememberMe) {
-            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000; // Cookie expires after 3 weeks
+            req.session.cookie.maxAge = 3 * 7 * 24 * 60 * 60 * 1000; // 3 weeks
         } else {
-            req.session.cookie.expires = false; // Cookie expires at end of session
+            req.session.cookie.maxAge = 24 * 60 * 60 * 1000; // 24 hours
         }
-      res.redirect('/'); 
+        res.redirect('/'); 
     }
 );
 
