@@ -171,7 +171,6 @@ footer img{
   height: 30px;
   width: 30px;
   object-fit: cover;
-<<<<<<< Updated upstream
 }
 
 .button-link {
@@ -191,12 +190,9 @@ footer img{
   background-color: var(--primary-color);
   opacity: 0.8;
 }
-=======
 
-}
 
 .usericon-header{
   border-radius: 50%;
   border: 2px solid var(--primary-color);
 }
->>>>>>> Stashed changes

@@ -2,105 +2,142 @@
 
 <div class="bookings-container">
 <h1>My Bookings</h1>
-    <div class="today-bookings">
-        <h2>Bookings Scheduled Today</h2>
-        {{#if todayBookings.length}}
-            <ul class="booking-list">
-                {{#each todayBookings}}
-                    <div class="booking-item">
-                    <a href="/booking/bookingDetails/{{this.bookingID}}">
-                        {{#if this.ride}}
-                            <p>{{this.ride.pickupPoint}}</p>
-                            <img src="/img/route.svg" alt="route">
-                            <p>{{this.ride.dropoffPoint}}</p> 
+
+<br>
+<hr width="100%" size="3" color="gray">
+<br>
+    <div class="bookings-wrapper">
+
+        <div class="today-bookings">
+            <h3>Bookings Today</h3>
+            {{#if todayBookings.length}}
+                <ul class="booking-list">
+                    {{#each todayBookings}}
+                        <div class="booking-item">
+                        <a href="/booking/bookingDetails/{{this.bookingID}}">
+                            {{#if this.ride}}
+                                <p>{{this.ride.pickupPoint}}</p>
+                                <img src="/img/route.svg" alt="route">
+                                <p>{{this.ride.dropoffPoint}}</p> 
+                                
+                                <p>Booking ID: {{this.bookingID}}</p>
+                                {{#if this.driver}}
+                                    <div class="driver-info">
+                                        <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
+                                        <p>Driver: {{this.driver.name}}</p>
+                                    </div>
+                                {{else}}
+                                    <p>Driver information not available</p>
+                                {{/if}}
+                                <p>Departure: {{formatTime1 this.ride.departureTime}}</p>
+                                <p>Price: ₱{{this.ride.price}}</p>
+                            {{else}}
+                                <p>Ride details not available</p>
+                            {{/if}}
+
+                            <div class="status">
+                                <p>Driver Response: </p>
+                                <p>{{this.responseStatus}}</p>
+                            </div>
+                            <div class="status">
+                                <p>Ride Status: </p>
+                                <p>{{#if (eq this.rideStatus 'ongoing')}}On the Way{{else}}{{this.rideStatus}}{{/if}}</p>
+                            </div>
+                            <div class="status">
+                                <p>Payment Status: </p>
+                                <p>{{this.paymentStatus}}</p>
+                            </div>
+                            </a>
+                            {{#if (isActive this.rideStatus this.responseStatus)}}
+                                <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
+                            {{/if}}
+                                <a href="/chat/{{this.ride.driverID}}" class="button-link"><i class="fa-solid fa-comment"></i></a>
+                        </div>
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p>No bookings scheduled for today.</p>
+            {{/if}}
+        </div>
+
+        <div class="other-bookings">
+            <h3>All Bookings</h3>
+            {{#if otherActiveBookings.length}}
+                <ul class="booking-list">
+                    {{#each otherActiveBookings}}
+                        
+                        <div class="booking-item">
+                        <a href="/booking/bookingDetails/{{this.bookingID}}">
+                            {{#if this.ride}}
+                            <div class="ride-info">
+                                <p>{{formatTime1 this.ride.departureTime}}</p>
+                                <p>₱{{this.ride.price}}</p>
+                            </div>
+                                
+                            <div class="ride-info-title">
+                                <p>Time</p>
+                                <p>Price</p>
+                            </div>
+
+                            <div class="ride-points">
+                                <p>{{this.ride.pickupPoint}}</p>
+                                <img src="/img/route.svg" alt="route">
+                                <p>{{this.ride.dropoffPoint}}</p>
+
+                            </div>
+
+                            <div class="ride-id">
+                                <p> Booking ID: {{this.bookingID}}</p>
+                                <p>{{formatDate this.bookingDate}}</p>
+                            </div>
                             
-                            <p>Booking ID: {{this.bookingID}}</p>
-                            {{#if this.driver}}
-                                <div class="driver-info">
-                                    <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
-                                    <p>Driver: {{this.driver.name}}</p>
+                            <div class="status-container">
+                                <div class="status">
+                                    <p>Driver Response: </p>
+                                    <p>{{this.responseStatus}}</p>
                                 </div>
-                            {{else}}
-                                <p>Driver information not available</p>
-                            {{/if}}
-                            <p>Departure: {{formatTime1 this.ride.departureTime}}</p>
-                            <p>Price: ₱{{this.ride.price}}</p>
-                        {{else}}
-                            <p>Ride details not available</p>
-                        {{/if}}
-
-                        <div class="status">
-                            <p>Driver Response: </p>
-                            <p>{{this.responseStatus}}</p>
-                        </div>
-                        <div class="status">
-                            <p>Ride Status: </p>
-                            <p>{{#if (eq this.rideStatus 'ongoing')}}On the Way{{else}}{{this.rideStatus}}{{/if}}</p>
-                        </div>
-                        <div class="status">
-                            <p>Payment Status: </p>
-                            <p>{{this.paymentStatus}}</p>
-                        </div>
-                        </a>
-                        {{#if (isActive this.rideStatus this.responseStatus)}}
-                            <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
-                        {{/if}}
-                            <a href="/chat/{{this.ride.driverID}}" class="button-link">Message Driver</a>
-                    </div>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>No bookings scheduled for today.</p>
-        {{/if}}
-    </div>
-
-    <div class="other-bookings">
-        <h2>All Bookings</h2>
-        {{#if otherActiveBookings.length}}
-            <ul class="booking-list">
-                {{#each otherActiveBookings}}
-                    <div class="booking-item">
-                    <a href="/booking/bookingDetails/{{this.bookingID}}">
-                        {{#if this.ride}}
-                            <h2>{{this.ride.pickupPoint}} to {{this.ride.dropoffPoint}}</h2>
-                            <p>Booking ID: {{this.bookingID}}</p>
-                            {{#if this.driver}}
-                                <div class="driver-info">
-                                    <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
-                                    <p>Driver: {{this.driver.name}}</p>
+                                <div class="status">
+                                    <p>Ride Status: </p>
+                                    <p>{{#if (eq this.rideStatus 'ongoing')}}On the Way{{else}}{{this.rideStatus}}{{/if}}</p>
                                 </div>
+                                <div class="status">
+                                    <p>Payment Status: </p>
+                                    <p>{{this.paymentStatus}}</p>
+                                </div>
+                            </div>
+                            
+                                {{#if this.driver}}
+                                    <div class="driver-info">
+                                        <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
+                                        <p>Driver: {{this.driver.name}}</p>
+                                    </div>
+                                {{else}}
+                                    <p>Driver information not available</p>
+                                {{/if}}
+                                
                             {{else}}
-                                <p>Driver information not available</p>
+                                <p>Ride details not available</p>
                             {{/if}}
-                            <p>Departure: {{formatTime1 this.ride.departureTime}}</p>
-                            <p>Price: ₱{{this.ride.price}}</p>
-                        {{else}}
-                            <p>Ride details not available</p>
-                        {{/if}}
-                        <p>Booking Date: {{formatDate this.bookingDate}}</p>
-                        <div class="status">
-                            <p>Driver Response: </p>
-                            <p>{{this.responseStatus}}</p>
+                            
+                            
+                            </a>
+
+                            <div class="booking-actions">
+
+                            {{#if (isActive this.rideStatus this.responseStatus)}}
+                                <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel</button>
+                            {{/if}}
+                                <a href="/chat/{{this.ride.driverID}}" class="button-link"><i class="fa-solid fa-comment"></i> Message</a>
+                            
+                            </div>
                         </div>
-                        <div class="status">
-                            <p>Ride Status: </p>
-                            <p>{{#if (eq this.rideStatus 'ongoing')}}On the Way{{else}}{{this.rideStatus}}{{/if}}</p>
-                        </div>
-                        <div class="status">
-                            <p>Payment Status: </p>
-                            <p>{{this.paymentStatus}}</p>
-                        </div>
-                        </a>
-                        {{#if (isActive this.rideStatus this.responseStatus)}}
-                            <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
-                        {{/if}}
-                                <a href="/chat/{{this.ride.driverID}}" class="button-link">Message Driver</a>
-                    </div>
-                {{/each}}
-            </ul>
-        {{else}}
-            <p>No other active bookings.</p>
-        {{/if}}
+                    {{/each}}
+                </ul>
+            {{else}}
+                <p>No other active bookings.</p>
+            {{/if}}
+        </div>
+
     </div>
 </div>
 
