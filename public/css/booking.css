@@ -1,3 +1,12 @@
+.bookings-container{
+  margin-top: 100px;
+  background-color: var(--secondary-color);
+  padding: 20px;
+  border-radius: 28px;
+}
+
+  
+
 .booking-item a {
   display: block;
   text-decoration: none;
@@ -8,8 +17,31 @@
   background-color: #f0f0f0;
 }
 
+<<<<<<< Updated upstream
 
 
 .booking-container {
   margin-top: 100px;
+=======
+.driver-photo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.driver-info {
+  display: flex;
+  align-items: center;
+}
+
+.status {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: bold;
+>>>>>>> Stashed changes
 }
