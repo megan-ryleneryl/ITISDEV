@@ -40,50 +40,30 @@
         </div>
     
         <div class="ridesecondinfo">
-            <label>Previous Available Days:</label>
-            <p>{{#each ride.availableDays}}{{this}},{{/each}}</p>
             
-
             <label>Set New Available Days:</label>
             <div class="ridesched">
-                <div class="day-container">
-                    <input type="checkbox" id="sunday" name="availableDays" value="sunday">
-                    <label for="sunday">S</label>
-                </div>
-                <div class="day-container">
-                    <input type="checkbox" id="monday" name="availableDays" value="monday">
-                    <label for="monday">M</label>
-                </div>
-                <div class="day-container">
-                    <input type="checkbox" id="tuesday" name="availableDays" value="tuesday">
-                    <label for="tuesday">T</label>
-                </div>
-                <div class="day-container">
-                    <input type="checkbox" id="wednesday" name="availableDays" value="wednesday">
-                    <label for="wednesday">W</label>
-                </div>
-                <div class="day-container">
-                    <input type="checkbox" id="thursday" name="availableDays" value="thursday">
-                    <label for="thursday">H</label>
-                </div>
-                <div class="day-container">
-                    <input type="checkbox" id="friday" name="availableDays" value="friday">
-                    <label for="friday">F</label>
-                </div>
-                <div class="day-container">
-                    <input type="checkbox" id="saturday" name="availableDays" value="saturday">
-                    <label for="saturday">S</label>
-                </div>
+                {{#each (array 'sunday' 'monday' 'tuesday' 'wednesday' 'thursday' 'friday' 'saturday') as |day|}}
+                    <div class="day-container">
+                    <input type="checkbox" id="{{day}}" name="availableDays" value="{{day}}" {{#if (includes day ../ride.availableDays)}}checked{{/if}}>
+                    <label for="{{day}}">
+                        {{#if (eq day 'sunday')}}S{{/if}}
+                        {{#if (eq day 'monday')}}M{{/if}}
+                        {{#if (eq day 'tuesday')}}T{{/if}}
+                        {{#if (eq day 'wednesday')}}W{{/if}}
+                        {{#if (eq day 'thursday')}}H{{/if}}
+                        {{#if (eq day 'friday')}}F{{/if}}
+                        {{#if (eq day 'saturday')}}S{{/if}}
+                    </label>
+                    </div>
+                {{/each}}
             </div>
             
-            <div class="rideotherdetails">
-              <p>Previous Departure Time: {{formatTime2 ride.departureTime}}</p>
-            </div>
             
             <div class="rideotherdetails">
                 
                 <label for="departureTime">Set New Departure Time:</label>
-                <input type="time" id="departureTime" name="departureTime" required>
+                <input type="time" id="departureTime" name="departureTime" value="{{formatTime2 ride.departureTime}}"required>
             </div>
     
             <div class="rideotherdetails">
