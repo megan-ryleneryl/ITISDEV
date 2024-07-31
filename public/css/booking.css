@@ -1,5 +1,5 @@
 .bookings-container{
-  margin-top: 100px;
+  margin-top: 70px;
   margin-bottom: 30px;
   background-color: var(--secondary-color);
   padding: 20px;
@@ -41,6 +41,7 @@
 
 .booking-item a {
   display: block;
+  width: 100%;
   text-decoration: none;
   color: inherit;
 

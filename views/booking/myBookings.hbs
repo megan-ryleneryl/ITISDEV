@@ -16,11 +16,43 @@
                         <div class="booking-item">
                         <a href="/booking/bookingDetails/{{this.bookingID}}">
                             {{#if this.ride}}
+                            <div class="ride-info">
+                                <p>{{formatTime1 this.ride.departureTime}}</p>
+                                <p>₱{{this.ride.price}}</p>
+                            </div>
+                                
+                            <div class="ride-info-title">
+                                <p>Time</p>
+                                <p>Price</p>
+                            </div>
+
+                            <div class="ride-points">
                                 <p>{{this.ride.pickupPoint}}</p>
                                 <img src="/img/route.svg" alt="route">
-                                <p>{{this.ride.dropoffPoint}}</p> 
-                                
-                                <p>Booking ID: {{this.bookingID}}</p>
+                                <p>{{this.ride.dropoffPoint}}</p>
+
+                            </div>
+
+                            <div class="ride-id">
+                                <p> Booking ID: {{this.bookingID}}</p>
+                                <p>{{formatDate this.bookingDate}}</p>
+                            </div>
+                            
+                            <div class="status-container">
+                                <div class="status">
+                                    <p>Driver Response: </p>
+                                    <p>{{this.responseStatus}}</p>
+                                </div>
+                                <div class="status">
+                                    <p>Ride Status: </p>
+                                    <p>{{#if (eq this.rideStatus 'ongoing')}}On the Way{{else}}{{this.rideStatus}}{{/if}}</p>
+                                </div>
+                                <div class="status">
+                                    <p>Payment Status: </p>
+                                    <p>{{this.paymentStatus}}</p>
+                                </div>
+                            </div>
+                            
                                 {{#if this.driver}}
                                     <div class="driver-info">
                                         <img src="{{this.driver.profilePicture}}" alt="Driver's profile picture" class="driver-photo">
@@ -29,29 +61,22 @@
                                 {{else}}
                                     <p>Driver information not available</p>
                                 {{/if}}
-                                <p>Departure: {{formatTime1 this.ride.departureTime}}</p>
-                                <p>Price: ₱{{this.ride.price}}</p>
+                                
                             {{else}}
                                 <p>Ride details not available</p>
                             {{/if}}
-
-                            <div class="status">
-                                <p>Driver Response: </p>
-                                <p>{{this.responseStatus}}</p>
-                            </div>
-                            <div class="status">
-                                <p>Ride Status: </p>
-                                <p>{{#if (eq this.rideStatus 'ongoing')}}On the Way{{else}}{{this.rideStatus}}{{/if}}</p>
-                            </div>
-                            <div class="status">
-                                <p>Payment Status: </p>
-                                <p>{{this.paymentStatus}}</p>
-                            </div>
+                            
+                            
                             </a>
+
+                            <div class="booking-actions">
+
                             {{#if (isActive this.rideStatus this.responseStatus)}}
-                                <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel Booking</button>
+                                <button class="cancel-booking" data-booking-id="{{this.bookingID}}">Cancel</button>
                             {{/if}}
-                                <a href="/chat/{{this.ride.driverID}}" class="button-link"><i class="fa-solid fa-comment"></i></a>
+                                <a href="/chat/{{this.ride.driverID}}" class="button-link"><i class="fa-solid fa-comment"></i> Message</a>
+                            
+                            </div>
                         </div>
                     {{/each}}
                 </ul>
