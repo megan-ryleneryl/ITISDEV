@@ -1,22 +1,52 @@
 
-<div class="bookings-container">
-  <h1>{{title}}</h1>
+<div class="bookride-container">
+  {{!-- <h1>{{title}}</h1> --}}
 
-  <div class="ride-details">
-    <h2>Ride Details:</h2>
+<div class="bookride-left">
+
+  <div class="ride-details-booking">
+    <p>Ride Details:</p>
     <div class="time-details">
-      <p>{{formatTime ride.departureTime.hour ride.departureTime.minute}} {{ride.pickupPoint}}</p>
-      <p>{{formatTime ride.arrivalTime.hour ride.arrivalTime.minute}} {{ride.dropoffPoint}}</p>
+      <div class="ride">
+        <span style="font-family: 'Maven Pro', sans-serif;">{{formatTime ride.departureTime.hour ride.departureTime.minute}}</span> 
+        -
+        {{ride.pickupPoint}}
+
+      </div>
+      <div class="ride">
+        <span style="font-family: 'Maven Pro', sans-serif;">{{formatTime ride.arrivalTime.hour ride.arrivalTime.minute}}</span> 
+        -
+        {{ride.dropoffPoint}}
+      </div>
     </div>
+
+    <br>
+    <hr width="100%" size="3" color="gray">
+    <br>
+
     <p>Total price for 1 passenger: ₱{{ride.price}}</p>
     <p>Payment method: Cash</p>
+
+    <br>
+    <hr width="100%" size="3" color="gray">
+    <br>
+
   </div>
 
   <div class="driver-info">
     <img src="{{driver.profilePicture}}" alt="Driver profile picture" class="driver-photo">
     <p>{{driver.name}}</p>
-    <a href="/chat/{{driver.userID}}" class="button-link">Message Driver</a>
   </div>
+
+  <br>
+  <hr width="100%" size="3" color="gray">
+  <br>
+
+    <a href="/chat/{{driver.userID}}"> <span style="color: var(--primary-color);">Message Driver</span></a>
+
+  <br>
+  <hr width="100%" size="3" color="gray">
+  <br>
 
   <div class="vehicle-info">
     <h3>Vehicle</h3>
@@ -24,40 +54,66 @@
     <p>{{driver.carPlate}}</p>
   </div>
 
+</div>
+
+
+<div class="bookride-right">
+
   <div class="route-map">
-    <h3>Ride Route</h3>
-    <p>Leaving at:{{formatTime1 ride.departureTime}}, Arriving at: {{formatTime1 ride.arrivalTime}}</p>
     <div class="sample-map">
       <img src="/img/sample-map.png" alt="Sample route map" style="width: 100%; height: 300px; object-fit: cover;">
     </div>
+    <h3>Ride Route</h3>
+    <p>50 mins</p>
   </div>
 
   <div class="date-selection">
     <h3>Which dates do you want to book?</h3>
     <p>You can book up to 1 month in advance!</p>
 
-    <p>This ride is only available on: {{ride.availableDays}}</p>
-    
-  <div class="calendar">
-    <h4>{{currentMonth}}</h4>
-    <table>
-      {{#each calendarDays}}
-        {{#if @first}}<tr>{{/if}}
-        <td>
-          {{#if this.isAvailable}}
-            <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
-            <label for="date-{{this.date}}">{{this.day}}</label>
-          {{else}}
-            <span class="unavailable">{{this.day}}</span>
-          {{/if}}
-        </td>
-        {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
+
+    <div class="ridesched">
+      {{#each (array 'sunday' 'monday' 'tuesday' 'wednesday' 'thursday' 'friday' 'saturday') as |day|}}
+        <div class="day-container">
+          <input type="checkbox" id="{{day}}" name="availableDays" value="{{day}}" {{#if (includes day ../ride.availableDays)}}checked{{/if}} disabled>
+          <label for="{{day}}">
+            {{#if (eq day 'sunday')}}S{{/if}}
+            {{#if (eq day 'monday')}}M{{/if}}
+            {{#if (eq day 'tuesday')}}T{{/if}}
+            {{#if (eq day 'wednesday')}}W{{/if}}
+            {{#if (eq day 'thursday')}}H{{/if}}
+            {{#if (eq day 'friday')}}F{{/if}}
+            {{#if (eq day 'saturday')}}S{{/if}}
+          </label>
+        </div>
       {{/each}}
-    </table>
+    </div>
+    
+    <div class="calendar">
+      <h4>{{currentMonth}}</h4>
+      <table>
+        {{#each calendarDays}}
+          {{#if @first}}<tr>{{/if}}
+          <td>
+            {{#if this.isAvailable}}
+              <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
+              <label for="date-{{this.date}}">{{this.day}}</label>
+            {{else}}
+              <span class="unavailable">{{this.day}}</span>
+            {{/if}}
+          </td>
+          {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
+        {{/each}}
+      </table>
+    </div>
+
+    <button id="bookRideBtn" class="button-link">Book Ride</button>
   </div>
+
+
 </div>
 
-  <button id="bookRideBtn" class="button-link">Book Ride</button>
+
 </div>
 
 

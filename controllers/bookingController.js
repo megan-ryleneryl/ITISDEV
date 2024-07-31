@@ -58,7 +58,7 @@ async function getBookingForm(req, res) {
         calendarDays: calendarDays,
         formatMonth: formatMonth,
         isEndOfWeek: isEndOfWeek,
-        css: ['booking.css'],
+        css: ['booking.css', 'ride.css'],
         layout: "main",
         user: req.user,
         messages: {
