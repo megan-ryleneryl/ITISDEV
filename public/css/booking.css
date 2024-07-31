@@ -278,3 +278,37 @@
 .unavailable {
     color: #bbb;
 }
+
+.price {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.price-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.price-details p {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: var(--secondary-color);
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.price-details h2 {
+    font-family: 'Maven Pro', sans-serif;
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
