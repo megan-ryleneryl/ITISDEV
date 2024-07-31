@@ -1,5 +1,5 @@
 
-<div class="booking-container">
+<div class="bookings-container">
   <h1>{{title}}</h1>
 
   <div class="ride-details">
@@ -15,7 +15,6 @@
   <div class="driver-info">
     <img src="{{driver.profilePicture}}" alt="Driver profile picture" class="driver-photo">
     <p>{{driver.name}}</p>
-    <p>{{driver.rating}} ratings</p>
     <a href="/chat/{{driver.userID}}" class="button-link">Message Driver</a>
   </div>
 
@@ -27,7 +26,7 @@
 
   <div class="route-map">
     <h3>Ride Route</h3>
-    <p>Leaving at:{{ride.departureTime}}, Arriving at: {{ride.arrivalTime}}</p>
+    <p>Leaving at:{{formatTime1 ride.departureTime}}, Arriving at: {{formatTime1 ride.arrivalTime}}</p>
     <div class="sample-map">
       <img src="/img/sample-map.png" alt="Sample route map" style="width: 100%; height: 300px; object-fit: cover;">
     </div>
@@ -39,46 +38,24 @@
 
     <p>This ride is only available on: {{ride.availableDays}}</p>
     
-    <div class="calendar">
-      <h4>{{currentMonth}}</h4>
-      <table>
-        {{#each calendarDaysCurrentMonth}}
-          {{#if @first}}<tr>{{/if}}
-          <td class="{{#unless this.isInMonth}}not-in-month{{/unless}}">
-            {{#if this.isInMonth}}
-              {{#if this.isAvailable}}
-                <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
-                <label for="date-{{this.date}}">{{this.day}}</label>
-              {{else}}
-                <span class="unavailable">{{this.day}}</span>
-              {{/if}}
-            {{/if}}
-          </td>
-          {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
-        {{/each}}
-      </table>
-    </div>
-
-    <div class="calendar">
-      <h4>{{nextMonth}}</h4>
-      <table>
-        {{#each calendarDaysNextMonth}}
-          {{#if @first}}<tr>{{/if}}
-          <td class="{{#unless this.isInMonth}}not-in-month{{/unless}}">
-            {{#if this.isInMonth}}
-              {{#if this.isAvailable}}
-                <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
-                <label for="date-{{this.date}}">{{this.day}}</label>
-              {{else}}
-                <span class="unavailable">{{this.day}}</span>
-              {{/if}}
-            {{/if}}
-          </td>
-          {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
-        {{/each}}
-      </table>
-    </div>
+  <div class="calendar">
+    <h4>{{currentMonth}}</h4>
+    <table>
+      {{#each calendarDays}}
+        {{#if @first}}<tr>{{/if}}
+        <td>
+          {{#if this.isAvailable}}
+            <input type="checkbox" id="date-{{this.date}}" name="selectedDates" value="{{this.date}}">
+            <label for="date-{{this.date}}">{{this.day}}</label>
+          {{else}}
+            <span class="unavailable">{{this.day}}</span>
+          {{/if}}
+        </td>
+        {{#if @last}}</tr>{{else if (isEndOfWeek @index)}}</tr><tr>{{/if}}
+      {{/each}}
+    </table>
   </div>
+</div>
 
   <button id="bookRideBtn" class="button-link">Book Ride</button>
 </div>

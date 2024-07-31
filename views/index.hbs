@@ -107,10 +107,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
 
-        const maxDate = new Date();
+        const maxDate = new Date(tomorrow);
         maxDate.setDate(tomorrow.getDate() + 30);
 
         flatpickr("#dateTo", {
@@ -120,7 +121,11 @@
             minDate: tomorrow,
             maxDate: maxDate,
             defaultDate: tomorrow,
-            mode: "multiple"
+            mode: "multiple",
+            enableTime: false,
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.input.value = instance.formatDate(tomorrow, "F j, Y");
+            }
         });
         flatpickr("#dateFrom", {
             dateFormat: "Y-m-d",
@@ -129,7 +134,11 @@
             minDate: tomorrow,
             maxDate: maxDate,
             defaultDate: tomorrow,
-            mode: "multiple"
+            mode: "multiple",
+            enableTime: false,
+            onReady: function(selectedDates, dateStr, instance) {
+                instance.input.value = instance.formatDate(tomorrow, "F j, Y");
+            }
         });
     });
 
@@ -138,7 +147,8 @@
     });
 
     function scrollToSection(id) {
-    const element = document.getElementById(id);
-    element.scrollIntoView({ behavior: 'smooth' });
-}
+        const element = document.getElementById(id);
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
 </script>
+

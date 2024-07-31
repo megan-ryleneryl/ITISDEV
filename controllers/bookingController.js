@@ -32,44 +32,30 @@ async function getBookingForm(req, res) {
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const availableDays = ride.availableDays.map(day => day.toLowerCase()); // Convert days to lowercase 
-    const weekDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']; // Array of week days
-    
-    // Find the closest available day from tomorrow
-    let closestAvailableDay = new Date(today);
-    while (!availableDays.includes(weekDays[closestAvailableDay.getDay()])) { // Check if the day is available for booking
-        closestAvailableDay.setDate(closestAvailableDay.getDate() + 1); // Move to the next day
-    }
+    const availableDays = ride.availableDays.map(day => day.toLowerCase());
+    const weekDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
-    const calendarDaysCurrentMonth = []; // Array to store days of the current month
-    const calendarDaysNextMonth = [];
-    const startDay = new Date(closestAvailableDay);
-    startDay.setDate(startDay.getDate() - startDay.getDay()); // Start from the first day of the week
-    const endDay = new Date(today.getFullYear(), today.getMonth() + 2, 0); // End at the end of the next month
+    const calendarDays = [];
+    const startDay = new Date(tomorrow);
+    const endDay = new Date(startDay);
+    endDay.setDate(endDay.getDate() + 29); // Show 30 days including tomorrow
 
     for (let day = new Date(startDay); day <= endDay; day.setDate(day.getDate() + 1)) {
         const calendarDay = {
             date: day.toISOString().split('T')[0],
             day: day.getDate(),
-            isInMonth: day.getMonth() === closestAvailableDay.getMonth() || day.getMonth() === closestAvailableDay.getMonth() + 1,
-            isAvailable: availableDays.includes(weekDays[day.getDay()]) && day >= tomorrow
+            isInMonth: true, // All days are in the relevant month(s)
+            isAvailable: availableDays.includes(weekDays[day.getDay()])
         };
-        
-        if (day.getMonth() === today.getMonth()) {
-            calendarDaysCurrentMonth.push(calendarDay);
-        } else if (day.getMonth() === today.getMonth() + 1) {
-            calendarDaysNextMonth.push(calendarDay);
-        }
+        calendarDays.push(calendarDay);
     }
 
     res.render('booking/bookride', { 
         title: 'Book Ride',
         ride: ride,
         driver: driver,
-        currentMonth: formatMonth(closestAvailableDay),
-        nextMonth: formatMonth(new Date(closestAvailableDay.getFullYear(), closestAvailableDay.getMonth() + 1, 1)),
-        calendarDaysCurrentMonth: calendarDaysCurrentMonth,
-        calendarDaysNextMonth: calendarDaysNextMonth,
+        currentMonth: formatMonth(startDay),
+        calendarDays: calendarDays,
         formatMonth: formatMonth,
         isEndOfWeek: isEndOfWeek,
         css: ['booking.css'],
@@ -84,14 +70,10 @@ async function getBookingForm(req, res) {
 
 
 
-
 async function bookRide(req, res) {
     const { rideId, dates } = req.body;
     const passengerId = req.user.userID;
 
-  
-
-  
     try {
       // Get the last booking ID
       const lastBooking = await Booking.findOne().sort('-bookingID');

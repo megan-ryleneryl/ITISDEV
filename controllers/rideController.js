@@ -170,6 +170,7 @@ async function viewRides(req, res) {
 async function searchRides(req, res) {
   try {
     const { rideType, pickupPoint, dropoffPoint, date } = req.body;
+    const loggedInUserID = req.user.userID;
 
     // Parse the dates (date is now expected to be an array of dates)
     const searchDates = date.split(',').map(d => new Date(d.trim()));
@@ -178,7 +179,7 @@ async function searchRides(req, res) {
     const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const searchDays = searchDates.map(searchDate => days[searchDate.getDay()]);
 
-    // Find rides that match any of the search days
+    // Find rides that match any of the search days and are not created by the logged-in user
     const rides = await Ride.find({
       rideType,
       pickupPoint,
@@ -189,7 +190,8 @@ async function searchRides(req, res) {
         $lte: 23 
       },
       numSeats: { $gte: 1 },
-      status: 'active'
+      status: 'active',
+      driverID: { $ne: loggedInUserID } // Exclude rides created by the logged-in user
     }).sort('-createdAt');
 
     // Populate driver information for each ride
@@ -217,6 +219,7 @@ async function searchRides(req, res) {
     res.redirect('/');
   }
 }
+
 
 
 // View a specific ride
