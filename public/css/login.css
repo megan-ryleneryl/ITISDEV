@@ -1,0 +1,155 @@
+/* login.css */
+.page-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--secondary-color);
+    margin: 0;
+}
+
+.login-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    max-height: 450px;
+    padding: 40px;
+    background-color: var(--tertiary-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.log-in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.text-logo {
+    width: 150px;
+    margin-bottom: 20px;
+}
+
+.form-wrap {
+    width: 100%;
+}
+
+h1.bold {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--primary-color);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+    box-sizing: border-box;
+}
+
+input[type="email"],
+input[type="password"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--quaternary-color);
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+}
+
+.checkbox-container input {
+    margin-right: 10px;
+    display: none;
+}
+
+.checkbox-container .checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: var(--tertiary-color);
+    border: 1px solid var(--quaternary-color);
+    border-radius: 3px;
+    margin-left: 7px;
+}
+
+.checkbox-container input:checked + .checkmark {
+    background-color: var(--primary-color);
+}
+
+.checkbox-container .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: translate(-20%, -20%) rotate(45deg);
+}
+
+.checkbox-container input:checked + .checkmark:after {
+    display: block;
+}
+
+.form-button {
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: var(--tertiary-color);
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    text-align: center;
+}
+
+.form-button:hover {
+    background-color: #992323;
+    opacity: 0.8;
+}
+
+.registerlink {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.registerlink p {
+    margin-right: 5px;
+}
+
+.registerlink a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.registerlink a:hover {
+    text-decoration: underline;
+}
