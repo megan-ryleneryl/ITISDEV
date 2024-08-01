@@ -170,7 +170,10 @@ async function viewRides(req, res) {
 async function searchRides(req, res) {
   try {
     const { rideType, pickupPoint, dropoffPoint, date } = req.body;
-    const loggedInUserID = req.user.userID;
+    // Get the logged-in user's ID if there is one
+    const loggedInUserID = req.user ? req.user.userID : null;
+
+
 
     // Parse the dates (date is now expected to be an array of dates)
     const searchDates = date.split(',').map(d => new Date(d.trim()));
