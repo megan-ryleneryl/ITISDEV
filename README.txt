@@ -1,24 +1,3 @@
-===============TODOS===============
-- plan schema (luke)
-- setup jira (luke)
-- prep base code (megan)
-
-files that need editing:
-- passport config
-- all routes
-- all controllers
-
-
-
-===========DEFAULT USER============
-accType: Driver
-email: alaska.hills@dlsu.edu.ph
-password: 12345
-
-accType: Rider
-email: felicity_bloom@dlsu.edu.ph
-password: 12345
-
 ========MONGODB LOGIN CREDS========
 username: admin
 password: 12345
