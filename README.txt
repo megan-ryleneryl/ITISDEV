@@ -4,6 +4,10 @@ password: 12345
 database name: itisdev-mvp
 connection string: mongodb+srv://admin:12345@itisdev-mvp.jary1la.mongodb.net/itisdev-mvp
 
+========Sample User Credentials========
+username/email: luke_marion_aniago@dlsu.edu.ph
+pw: 123
+
 ===========DEPENDENCIES===========
 npm install express
 npm install express-handlebars
